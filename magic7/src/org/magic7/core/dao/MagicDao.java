@@ -422,6 +422,7 @@ public class MagicDao extends BaseDao {
 	@SuppressWarnings("unchecked")
 	public List<MagicRegionRow> listRow(String partition,String spaceName,String regionName,String displayName,String objectId,
 			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count) {
+		System.out.println("count partition:"+partition);
 		if(StringUtils.isEmpty(partition))
 			partition = ServiceStaticInfo.TABLE_PREFIX;
 		MagicSpaceRegion spaceRegion = getSpaceRegion(spaceName, regionName);
@@ -458,7 +459,7 @@ public class MagicDao extends BaseDao {
 			partition = ServiceStaticInfo.TABLE_PREFIX;
 		List<MagicDimension> dimensions = this.listDimension(null,spaceName, spaceRegion.getId(), null, null, null, " seq ");
 		Map<String,Object> params = new HashMap<String,Object>();
-		String header = "select count(*) from (select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_INFO row ,(select a.ROW_ID from (select ROW_ID from "
+		String header = "select count(*) from (select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ,(select a.ROW_ID from (select ROW_ID from "
 				+partition+"_ROW_ITEM where SPACE_REGION_NAME=:spaceRegionName ";
 		if(StringUtils.isNotEmpty(objectId))
 			header+=objectQuery;
@@ -468,7 +469,7 @@ public class MagicDao extends BaseDao {
 		}
 		header+= "group by ROW_ID) as a  ";
 		StringBuilder hql = new StringBuilder(header);
-		buildListRowItemValueMap(hql,null,objectId,dimensions,queryConditions,spaceRegion.getName(), params);
+		buildListRowItemValueMap(hql,partition,objectId,dimensions,queryConditions,spaceRegion.getName(), params);
 		hql.append(") x where x.ROW_ID=row.ID ");
 		if(valid!=null) {
 			hql.append(" and row.valid=:valid");

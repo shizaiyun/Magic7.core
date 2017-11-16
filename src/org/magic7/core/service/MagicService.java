@@ -71,4 +71,5 @@ public interface MagicService {
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) ;
 	public List<MagicSuperRowItem> getRowItem(String partition,String spaceName,String regionName,String displayName,Object value);
 	public MagicCodeLib getJavaCodeLibBySignature(String signature) ;
+	public List<MagicSpace> listSpace();
 }

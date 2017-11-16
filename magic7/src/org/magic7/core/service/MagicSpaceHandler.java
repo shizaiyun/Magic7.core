@@ -536,5 +536,21 @@ public class MagicSpaceHandler {
 		}
 		return service.saveCodeLib(lib);
 	}
+	
+	public static List<MagicDimension> createQueryCondition(String spaceName,String regionName,Map<String,String> conditionPairs) {
+        ServiceUtil.notNull(spaceName, "spaceName is null");
+        ServiceUtil.notNull(regionName, "regionName is null");
+        ServiceUtil.notNull(conditionPairs, "conditionPairs is null");
+        List<MagicDimension> queryConditions = new ArrayList<>();
+        Set<Entry<String,String>> entrySet = conditionPairs.entrySet();
+        for (Entry<String, String> entry : entrySet) {
+               if(StringUtils.isNotBlank(entry.getValue())) {
+                      MagicDimension query = service.getDimension(spaceName, regionName, entry.getKey(), MagicDimension.Destination.FOR_QUERY.getCode());
+                      query.setQueryCondition(entry.getValue());
+                      queryConditions.add(query);
+               }
+        }
+        return queryConditions;
+  }
 }
  

@@ -340,4 +340,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(signature, "signature is null");
 		return magicDao.getJavaCodeLibBySignature(signature);
 	}
+	@Override
+	public List<MagicSpace> listSpace() {
+		return magicDao.listSpace();
+	}
 }

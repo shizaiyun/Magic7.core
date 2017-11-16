@@ -681,4 +681,10 @@ public class MagicDao extends BaseDao {
 		params.put("signature", signature);
 		return (MagicCodeLib) super.getObject(hql, params);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MagicSpace> listSpace() {
+		Map<String,Object> params = new HashMap<String,Object>();
+		return super.list("select r from MagicSpace r where 1=1", params, 0, 10000);
+	}
 }

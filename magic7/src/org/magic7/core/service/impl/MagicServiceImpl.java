@@ -134,6 +134,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(spaceRegion.getDescription(), "spaceRegion.description is null");
 		ServiceUtil.notNull(spaceRegion.getMultiply(), "spaceRegion.multiply is null");
 		ServiceUtil.notNull(spaceRegion.getSeq(), "spaceRegion.seq is null");
+		ServiceUtil.notNull(spaceRegion.getSpaceId(), "spaceRegion.spaceId is null");
+		ServiceUtil.notNull(spaceRegion.getSpaceName(), "spaceRegion.spaceName is null");
 		ServiceUtil.notNull(spaceRegion.getRegionType(), "spaceRegion.regionType is null");
 		return magicDao.saveMagicSpaceRegion(spaceRegion);
 	}
@@ -349,5 +351,9 @@ public class MagicServiceImpl implements MagicService {
 	public MagicSpace getSpaceById(String id) {
 		ServiceUtil.notNull(id, "id is null");
 		return (MagicSpace) magicDao.getObject(MagicSpace.class, id);
+	}
+	public MagicSpaceRegion getSpaceRegionById(String regionId) {
+		ServiceUtil.notNull(regionId, "regionId is null");
+		return (MagicSpaceRegion) magicDao.getObject(MagicSpaceRegion.class, regionId);
 	}
 }

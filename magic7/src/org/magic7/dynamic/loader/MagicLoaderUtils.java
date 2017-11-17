@@ -98,7 +98,7 @@ public class MagicLoaderUtils {
 			attr.addAnnotation(annot);
 			ccFile.addAttribute(attr);
 			ccFile.setMinorVersion(49);
-			ccFile.setMajorVersion(50);
+			ccFile.setMajorVersion(51);
 			outPutClass(MagicSuperRowItem.class.getResource(".").getPath(),name,cls);
 		} catch (Exception e) {
 			e.printStackTrace();

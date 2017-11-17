@@ -28,7 +28,7 @@ public class MagicLoaderUtils {
 	public static final String packagePrefix = "org.magic7.core."+ServiceStaticInfo.CLASS_PREFIX+".";
 	private static HashMap<String, Object> objectPool = new HashMap<>();
 	private static HashMap<String, Class<?>> classtPool = new HashMap<>();
-	public static MagicService service = MagicServiceFactory.getLawService();
+	public static MagicService service = MagicServiceFactory.getMagicService();
 	public static final String rowItemPathPrefix = "org.magic7.core.domain.";
 	public static final String rowItemClassSuffix = "RowItem";
 	public static final String defaultPartition = "Magic";

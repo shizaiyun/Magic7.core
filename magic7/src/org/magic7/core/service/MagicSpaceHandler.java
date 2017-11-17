@@ -537,7 +537,7 @@ public class MagicSpaceHandler {
 		return service.saveCodeLib(lib);
 	}
 	
-	public static List<MagicDimension> createQueryCondition(String spaceName,String regionName,Map<String,String> conditionPairs) {
+	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,Map<String,String> conditionPairs) {
         ServiceUtil.notNull(spaceName, "spaceName is null");
         ServiceUtil.notNull(regionName, "regionName is null");
         ServiceUtil.notNull(conditionPairs, "conditionPairs is null");

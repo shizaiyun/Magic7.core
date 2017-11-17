@@ -642,7 +642,6 @@ public class MagicDao extends BaseDao {
 			hql.append(" and lib.codeType=:codeType");
 			params.put("codeType", codeType);
 		}
-		
 		return super.list(hql.toString(), params,0,10000);
 	}
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) {
@@ -681,10 +680,25 @@ public class MagicDao extends BaseDao {
 		params.put("signature", signature);
 		return (MagicCodeLib) super.getObject(hql, params);
 	}
-	
 	@SuppressWarnings("unchecked")
-	public List<MagicSpace> listSpace() {
+	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count) {
 		Map<String,Object> params = new HashMap<String,Object>();
-		return super.list("select r from MagicSpace r where 1=1", params, 0, 10000);
+		StringBuilder query = new StringBuilder("select r from MagicSpace r where 1=1");
+		buildSpaceQuery(query, spaceName, params);
+		if(StringUtils.isNotEmpty(orderBy))
+			query.append(" order by r.seq asc");
+		return super.list(query.toString(), params, start, count);
+	}
+	public Integer listSpaceCount(String spaceName, String orderBy, Integer start, Integer count) {
+		Map<String,Object> params = new HashMap<String,Object>();
+		StringBuilder query = new StringBuilder("select count(*) from MagicSpace r where 1=1");
+		buildSpaceQuery(query, spaceName, params);
+		return super.listCount(query.toString(), params);
+	}
+	private void buildSpaceQuery(StringBuilder query,String spaceName,  Map<String, Object> values) {
+		if(spaceName!=null && !"".equals(spaceName)) {
+			query.append(" and name =:spaceName");
+			values.put("spaceName", spaceName);
+		}
 	}
 }

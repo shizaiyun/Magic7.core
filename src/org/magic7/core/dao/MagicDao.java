@@ -697,8 +697,8 @@ public class MagicDao extends BaseDao {
 	}
 	private void buildSpaceQuery(StringBuilder query,String spaceName,  Map<String, Object> values) {
 		if(spaceName!=null && !"".equals(spaceName)) {
-			query.append(" and name =:spaceName");
-			values.put("spaceName", spaceName);
+			query.append(" and name like :spaceName");
+			values.put("spaceName", "%"+spaceName+"%");
 		}
 	}
 }

@@ -29,7 +29,7 @@ import org.magic7.dynamic.loader.MagicLoaderUtils;
 import org.magic7.utils.Dates;
 import org.magic7.utils.ServiceUtil;
 public class MagicSpaceHandler {
-	public static MagicService service = MagicServiceFactory.getLawService();
+	public static MagicService service = MagicServiceFactory.getMagicService();
 	private MagicSpaceHandler() {}
 	public static List<MagicDimension> listDimension(String spaceName,String regionName,String viewName,String dimensionNames,Integer destination) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");

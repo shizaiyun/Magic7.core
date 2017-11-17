@@ -98,7 +98,7 @@ public class MagicLoaderUtils {
 			attr.addAnnotation(annot);
 			ccFile.addAttribute(attr);
 			ccFile.setMinorVersion(49);
-			ccFile.setMajorVersion(51);
+			ccFile.setMajorVersion(50);
 			outPutClass(MagicSuperRowItem.class.getResource(".").getPath(),name,cls);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,7 +176,7 @@ public class MagicLoaderUtils {
 	}
 	
 	public static void generateAllRegionClass() {
-		List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(null, " seq ", 0, 1000); 
+		List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(null,null, " seq ", 0, 1000); 
 		for (MagicSpaceRegion spaceRegion : spaceRegions) {
 			MagicLoaderUtils.generateRegionClass(spaceRegion.getSpaceName(), spaceRegion.getName());
 		}

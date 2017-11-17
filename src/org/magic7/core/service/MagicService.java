@@ -45,6 +45,7 @@ public interface MagicService {
 			Boolean valid,List<MagicDimension> queryConditions,String orderBy, Integer start, Integer count);
 	public MagicDimension getDimension(String spaceName,String regionName, String dimensionName, Integer destination);
 	public MagicSpaceRegion getSpaceRegion(String spaceName, String regionName);
+	public MagicSpaceRegion getSpaceRegionById(String regionId);
 	public MagicSpace getSpaceByName(String name);
 	public MagicSpace getSpaceById(String id);
 	public List<MagicObjectRegion> listObjectRegion(String spaceName,String objectId);

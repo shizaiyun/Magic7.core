@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.magic7.core.domain.MagicCodeLib;
+import org.magic7.core.domain.MagicSpaceRegion;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.service.MagicService;
 import org.magic7.core.service.MagicServiceFactory;
@@ -171,6 +172,13 @@ public class MagicLoaderUtils {
 			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void generateAllRegionClass() {
+		List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(null, " seq ", 0, 1000); 
+		for (MagicSpaceRegion spaceRegion : spaceRegions) {
+			MagicLoaderUtils.generateRegionClass(spaceRegion.getSpaceName(), spaceRegion.getName());
 		}
 	}
 }

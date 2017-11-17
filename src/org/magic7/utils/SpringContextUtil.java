@@ -7,8 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class SpringContextUtil implements ServletContextListener 
-{
+public class SpringContextUtil implements ServletContextListener {
 	private static WebApplicationContext springContext;
 
 	public SpringContextUtil() 

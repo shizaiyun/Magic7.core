@@ -46,8 +46,9 @@ public interface MagicService {
 	public MagicDimension getDimension(String spaceName,String regionName, String dimensionName, Integer destination);
 	public MagicSpaceRegion getSpaceRegion(String spaceName, String regionName);
 	public MagicSpace getSpaceByName(String name);
+	public MagicSpace getSpaceById(String id);
 	public List<MagicObjectRegion> listObjectRegion(String spaceName,String objectId);
-	public List<MagicSpaceRegion> listSpaceRegion(String spaceId,String orderBy,Integer start,Integer count);
+	public List<MagicSpaceRegion> listSpaceRegion(String spaceName,String spaceId,String orderBy,Integer start, Integer count);
 	public Boolean saveSpaceRegionView(MagicSpaceRegionView view);
 	public Boolean saveSpaceRegionViewItem(MagicSpaceRegionViewItem item);
 	public List<MagicSpaceRegionViewItem> listSpaceRegionViewItem(String spaceName,String regionName,String viewName, String orderBy);

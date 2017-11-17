@@ -295,7 +295,7 @@ public class MagicSpaceHandler {
 		try {
 			DaoAssistant.beginTransaction();
 			service.saveMagicObject(object);
-			List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(object.getSpaceId(), null, 0, 1000);
+			List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(null, object.getSpaceId(), null, 0, 1000);
 			MagicObjectRegion region = null;
 			for(MagicSpaceRegion spaceRegion:spaceRegions) {
 				region = new MagicObjectRegion();

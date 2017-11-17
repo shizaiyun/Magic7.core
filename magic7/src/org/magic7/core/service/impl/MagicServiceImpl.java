@@ -162,6 +162,8 @@ public class MagicServiceImpl implements MagicService {
 	}
 	public Boolean saveSpace(MagicSpace space) {
 		ServiceUtil.notNull(space, "space is null");
+		ServiceUtil.notNull(space.getName(), "space.name is null");
+		ServiceUtil.notNull(space.getDescription(), "space.description is null");
 		return magicDao.saveSpace(space);
 	}
 	public Boolean saveDimension(MagicDimension dimension) {
@@ -216,8 +218,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(space, "space is null");
 		return this.listMagicObjectRegion(objectId, space.getId(), null, " seq ", 0, 1000);
 	}
-	public List<MagicSpaceRegion> listSpaceRegion(String spaceId,String orderBy,Integer start,Integer count) {
-		return magicDao.listSpaceRegion(spaceId, orderBy, start, count);
+	public List<MagicSpaceRegion> listSpaceRegion(String spaceName,String spaceId,String orderBy,Integer start, Integer count) {
+		return magicDao.listSpaceRegion(spaceName, spaceId, orderBy, start, count);
 	}
 	public Boolean saveSpaceRegionView(MagicSpaceRegionView view) {
 		ServiceUtil.notNull(view, "view is null");
@@ -343,5 +345,9 @@ public class MagicServiceImpl implements MagicService {
 	@Override
 	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count) {
 		return magicDao.listSpace(spaceName, orderBy, start, count);
+	}
+	public MagicSpace getSpaceById(String id) {
+		ServiceUtil.notNull(id, "id is null");
+		return (MagicSpace) magicDao.getObject(MagicSpace.class, id);
 	}
 }

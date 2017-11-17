@@ -21,7 +21,7 @@ public class RegionClasGenerateUtil implements ServletContextListener {
 		MagicService service = MagicServiceFactory.getMagicService();
 		List<MagicSpace> magicSpaces = service.listSpace(null, null, 0, 1000);
 		for (MagicSpace magicSpace : magicSpaces) {
-			List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(magicSpace.getId(), " seq ", 0, 1000);
+			List<MagicSpaceRegion> spaceRegions = service.listSpaceRegion(null, magicSpace.getId(), " seq ", 0, 1000);
 			for (MagicSpaceRegion spaceRegion : spaceRegions) {
 				MagicLoaderUtils.generateRegionClass(magicSpace.getName(), spaceRegion.getName());
 			}

@@ -253,12 +253,16 @@ public class MagicDao extends BaseDao {
 		return (MagicSpace) super.getObject(hql, null);
 	}
 	@SuppressWarnings("unchecked")
-	public List<MagicSpaceRegion> listSpaceRegion(String spaceId,String orderBy,Integer start,Integer count) {
+	public List<MagicSpaceRegion> listSpaceRegion(String spaceName,String spaceId,String orderBy,Integer start, Integer count) {
 		StringBuilder hql = new StringBuilder("from MagicSpaceRegion where 1=1");
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(StringUtils.isNotEmpty(spaceId)) {
 			hql.append(" and spaceId=:spaceId");
 			params.put("spaceId", spaceId);
+		}
+		if(StringUtils.isNotEmpty(spaceName)) {
+			hql.append(" and spaceName=:spaceName");
+			params.put("spaceName", spaceName);
 		}
 		if(StringUtils.isNotEmpty(orderBy))
 			hql.append(" order by "+orderBy);

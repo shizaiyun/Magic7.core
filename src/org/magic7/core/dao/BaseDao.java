@@ -136,6 +136,7 @@ public class BaseDao {
 					query.setParameter(key, value);
 				}
 			}
+			System.out.println(query);
 			return query.setFirstResult(start).setMaxResults(count).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();

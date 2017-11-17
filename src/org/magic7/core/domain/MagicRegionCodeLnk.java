@@ -45,7 +45,10 @@ public class MagicRegionCodeLnk {
 	
 	@Column(name = "CODE_NAME", length = 200)
 	private String codeName;
-
+	
+	@Column(name = "SEQ")
+	private Integer seq;
+	
 	public String getId() {
 		return id;
 	}

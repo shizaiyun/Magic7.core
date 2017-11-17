@@ -341,7 +341,7 @@ public class MagicServiceImpl implements MagicService {
 		return magicDao.getJavaCodeLibBySignature(signature);
 	}
 	@Override
-	public List<MagicSpace> listSpace() {
-		return magicDao.listSpace();
+	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count) {
+		return magicDao.listSpace(spaceName, orderBy, start, count);
 	}
 }

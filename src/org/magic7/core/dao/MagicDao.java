@@ -532,6 +532,20 @@ public class MagicDao extends BaseDao {
 			hql.append(" order by "+orderBy);
 		return super.list(hql.toString(), params,0,100);
 	}
+	@SuppressWarnings("unchecked")
+	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName) {
+		StringBuilder hql = new StringBuilder("from MagicSpaceRegionView where 1=1"); 
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(StringUtils.isNotEmpty(spaceName)) {
+			hql.append(" and spaceName=:spaceName");
+			params.put("spaceName", spaceName);
+		}
+		if(StringUtils.isNotEmpty(regionName)) {
+			hql.append(" and spaceRegionName=:regionName");
+			params.put("regionName", regionName);
+		}
+		return super.list(hql.toString(), params,0,100);
+	}
 	public MagicSpaceRegionViewItem getSpaceRegionViewItem(String spaceId,String spaceRegionId,String viewName,String dimensionId) {
 		StringBuilder hql = new StringBuilder("from MagicSpaceRegionViewItem where 1=1"); 
 		Map<String,Object> params = new HashMap<String,Object>();

@@ -59,7 +59,6 @@ public interface MagicService {
 	
 	public MagicSpaceRegionView getSpaceRegionView(String spaceName,String dimensionRegionName,String viewName);
 	public Boolean saveChoiceItem(MagicChoiceItem choiceItem);
-	public List<MagicChoiceItem> listChoiceItemByName(String choiceName);
 	public List<MagicRegionRow> listRow(String partition,String spaceName,String regionName,String displayName,String objectId,
 			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count);
 	public Integer listRowCount(String partition, String spaceName,String regionName,
@@ -74,5 +73,6 @@ public interface MagicService {
 	public List<MagicSuperRowItem> getRowItem(String partition,String spaceName,String regionName,String displayName,Object value);
 	public MagicCodeLib getJavaCodeLibBySignature(String signature) ;
 	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count);
+	public List<MagicChoiceItem> listChoiceItem(String name,String code);
 	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName);
 }

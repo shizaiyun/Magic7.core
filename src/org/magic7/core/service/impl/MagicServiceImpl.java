@@ -277,10 +277,6 @@ public class MagicServiceImpl implements MagicService {
 		return magicDao.saveChoiceItem(choiceItem);
 	}
 	
-	public List<MagicChoiceItem> listChoiceItemByName(String choiceName){
-		ServiceUtil.notNull(choiceName, "choiceName is null");
-		return magicDao.listChoiceItemByName(choiceName); 
-	}
 	public MagicSpaceRegionView getSpaceRegionView(String spaceName,String dimensionRegionName,
 			String viewName) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
@@ -357,7 +353,14 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(regionId, "regionId is null");
 		return (MagicSpaceRegion) magicDao.getObject(MagicSpaceRegion.class, regionId);
 	}
+
+	@Override
+	public List<MagicChoiceItem> listChoiceItem(String name, String code) {
+		return magicDao.listChoiceItem(name, code);
+	}
+
 	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName) {
 		return magicDao.listSpaceRegionView(spaceName, regionName);
 	}
+
 }

@@ -610,17 +610,6 @@ public class MagicDao extends BaseDao {
 	public Boolean saveChoiceItem(MagicChoiceItem choiceItem){
 		return super.save(choiceItem);
 	}
-	@SuppressWarnings("unchecked")
-	public List<MagicChoiceItem> listChoiceItemByName(String choiceName){
-		StringBuilder hql = new StringBuilder("select r from MagicChoiceItem r where 1=1");
-		Map<String,Object> params = new HashMap<String,Object>();
-		if(choiceName!=null && !"".equals(choiceName)){
-			hql.append(" and r.choiceName=:choiceName");
-			params.put("choiceName", choiceName);
-		}
-		hql.append(" order by r.seq asc");
-		return super.list(hql.toString(), params, 0, 10000);
-	}
 	public Boolean saveCodeLib(MagicCodeLib lib) {
 		return super.save(lib);
 	}
@@ -718,5 +707,20 @@ public class MagicDao extends BaseDao {
 			query.append(" and name like :spaceName");
 			values.put("spaceName", "%"+spaceName+"%");
 		}
+	}
+	@SuppressWarnings("unchecked")
+	public List<MagicChoiceItem> listChoiceItem(String name, String code) {
+		StringBuilder hql = new StringBuilder("select r from MagicChoiceItem r where 1=1");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(name!=null && !"".equals(name)){
+			hql.append(" and r.choiceName=:choiceName");
+			params.put("choiceName", name);
+		}
+		if(code!=null && !"".equals(code)){
+			hql.append(" and r.choiceCode=:choiceCode");
+			params.put("choiceCode", code);
+		}
+		hql.append(" order by r.seq asc");
+		return super.list(hql.toString(), params, 0, 10000);
 	}
 }

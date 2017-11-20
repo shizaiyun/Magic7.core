@@ -168,7 +168,7 @@ public class MagicUtil {
 	public static void bindChoiceItem(MagicDimension dimension,String choiceName,String choiceCode,String choiceCodeItems[],String choiceItems[]) {
 		if(choiceItems==null||choiceItems.length==0)
 			throw new RuntimeException(choiceName+"'s choiceItems[] is null") ;
-		List<MagicChoiceItem> severities = service.listChoiceItemByName(choiceName);
+		List<MagicChoiceItem> severities = service.listChoiceItem(null,choiceCode);
 		if(severities!=null&&severities.size()==0) {
 			for(int i=0;i<choiceItems.length;i++){
 				MagicChoiceItem choiceItem = new MagicChoiceItem();

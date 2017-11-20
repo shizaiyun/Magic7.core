@@ -420,7 +420,7 @@ public class MagicDimension {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public String getSeverityId() {
+	public String getChoiceCode() {
 		return choiceCode;
 	}
 	public void setChoiceCode(String choiceCode) {

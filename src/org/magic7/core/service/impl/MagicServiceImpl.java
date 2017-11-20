@@ -357,7 +357,7 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(regionId, "regionId is null");
 		return (MagicSpaceRegion) magicDao.getObject(MagicSpaceRegion.class, regionId);
 	}
-	public List<MagicSpaceRegionView> listSapceRegionView(String spaceName,String regionName) {
+	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName) {
 		return magicDao.listSpaceRegionView(spaceName, regionName);
 	}
 }

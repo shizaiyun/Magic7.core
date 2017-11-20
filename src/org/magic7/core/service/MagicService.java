@@ -74,5 +74,5 @@ public interface MagicService {
 	public List<MagicSuperRowItem> getRowItem(String partition,String spaceName,String regionName,String displayName,Object value);
 	public MagicCodeLib getJavaCodeLibBySignature(String signature) ;
 	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count);
-	public List<MagicSpaceRegionView> listSapceRegionView(String spaceName,String regionName);
+	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName);
 }

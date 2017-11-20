@@ -56,7 +56,7 @@ public class MagicDimension {
 	public enum Destination {
 		FOR_DATA("FOR_DATA",0),
 		FOR_QUERY("FOR_QUERY",1),
-		FOR_PAGE("FOR_BUTTON",2);
+		FOR_BUTTON("FOR_BUTTON",2);
 		private String name;
 		private Integer code;
 		private Destination(String name,Integer code) {
@@ -170,7 +170,8 @@ public class MagicDimension {
 		DATE_VALUE("DATE_VALUE",2),
 		BOOLEAN_VALUE("BOOLEAN_VALUE",3),
 		ATTACHMENT_VALUE("ATTACHMENT_VALUE",4),
-		LIST_STR_VALUE("LIST_STR_VALUE",5);
+		LIST_STR_VALUE("LIST_STR_VALUE",5),
+		TEMP("TEMP",6);
 		private String name;
 		private Integer code;
 		private ValueType(String name,Integer code) {

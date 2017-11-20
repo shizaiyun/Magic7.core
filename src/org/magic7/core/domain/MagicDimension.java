@@ -375,6 +375,12 @@ public class MagicDimension {
 	public Integer getValueType() {
 		return valueType;
 	}
+	public String getValueTypeName() {
+		ValueType type = ValueType.getValueType(valueType);
+		if(type==null)
+			return null;
+		return type.name;
+	}
 	public void setValueType(Integer valueType) {
 		this.valueType = valueType;
 	}

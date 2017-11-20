@@ -174,17 +174,18 @@ public class MagicServiceImpl implements MagicService {
 		if(dimension.getLnk()) 
 			ServiceUtil.notNull(dimension.getRelationEntityName(), "dimension.relationEntityName is null");
 		ServiceUtil.notNull(dimension.getName(), "dimension.name is null");
+		ServiceUtil.notNull(dimension.getDisplayName(), "dimension.displayName is null");
 		ServiceUtil.notNull(dimension.getPageType(), "dimension.pageType is null");
 		ServiceUtil.notNull(dimension.getRequired(), "dimension.required is null");
 		ServiceUtil.notNull(dimension.getSeq(), "dimension.seq is null");
 		ServiceUtil.notNull(dimension.getSpaceId(), "dimension.spaceId is null");
-		ServiceUtil.notNull(dimension.getSpaceRegionId(), "dimension.spaceId is null");
+		ServiceUtil.notNull(dimension.getSpaceRegionId(), "dimension.regionId is null");
 		ServiceUtil.notNull(dimension.getValueType(), "dimension.valueType is null");
 		ServiceUtil.notNull(dimension.getVirtual(), "dimension.virtual is null");
 		ServiceUtil.notNull(dimension.getSpaceName(), "dimension.spaceName is null");
 		ServiceUtil.notNull(dimension.getSpaceRegionName(), "dimension.spaceName is null");
 		if(dimension.getDestination()==null)
-			dimension.setDestination(MagicDimension.Destination.FOR_QUERY.getCode());
+			dimension.setDestination(MagicDimension.Destination.FOR_DATA.getCode());
 		return magicDao.saveMagicDimension(dimension);
 	}
 	public MagicDimension getDimensionById(String id) {

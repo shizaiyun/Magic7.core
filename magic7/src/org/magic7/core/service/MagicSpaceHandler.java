@@ -204,6 +204,8 @@ public class MagicSpaceHandler {
 			Object obj = null;
 			Object value = null;
 			for(MagicSuperRowItem item:values) {
+				if(MagicDimension.ValueType.TEMP.getCode().equals(item.getValueType()))
+					continue;
 				/*if(row.getValid()) {
 					if(item.getRequired()&&getRowItemValue(item)==null)
 						throw new RuntimeException(item.getDisplayName()+"'s value is null");

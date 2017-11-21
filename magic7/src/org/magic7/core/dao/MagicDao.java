@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
+import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.domain.MagicObject;
@@ -713,8 +714,23 @@ public class MagicDao extends BaseDao {
 		StringBuilder hql = new StringBuilder("select r from MagicChoiceItem r where 1=1");
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(name!=null && !"".equals(name)){
-			hql.append(" and r.choiceName=:choiceName");
-			params.put("choiceName", name);
+			hql.append(" and r.choiceName like :choiceName");
+			params.put("choiceName", "%"+name+"%");
+		}
+		if(code!=null && !"".equals(code)){
+			hql.append(" and r.choiceCode=:choiceCode");
+			params.put("choiceCode", code);
+		}
+		hql.append(" order by r.seq asc");
+		return super.list(hql.toString(), params, 0, 10000);
+	}
+	@SuppressWarnings("unchecked")
+	public List<MagicChoice> listChoice(String name, String code) {
+		StringBuilder hql = new StringBuilder("select r from MagicChoice r where 1=1");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(name!=null && !"".equals(name)){
+			hql.append(" and r.choiceName like :choiceName");
+			params.put("choiceName", "%"+name+"%");
 		}
 		if(code!=null && !"".equals(code)){
 			hql.append(" and r.choiceCode=:choiceCode");

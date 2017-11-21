@@ -521,7 +521,7 @@ public class MagicDao extends BaseDao {
 			params.put("spaceName", spaceName);
 		}
 		if(StringUtils.isNotEmpty(regionName)) {
-			hql.append(" and regionName=:regionName");
+			hql.append(" and spaceRegionName=:regionName");
 			params.put("regionName", regionName);
 		}
 		if(StringUtils.isNotEmpty(viewName)) {

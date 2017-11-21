@@ -75,4 +75,6 @@ public interface MagicService {
 	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count);
 	public List<MagicChoiceItem> listChoiceItem(String name,String code);
 	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName);
+	public MagicSpaceRegionView getViewById(String viewId);
+	public MagicSpaceRegionViewItem getViewItemById(String itemId);
 }

@@ -10,6 +10,7 @@ import org.magic7.core.dao.MagicDao;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
+import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.domain.MagicObject;
@@ -367,5 +368,14 @@ public class MagicServiceImpl implements MagicService {
 	public MagicSpaceRegionViewItem getViewItemById(String itemId) {
 		ServiceUtil.notNull(itemId, "itemId is null");
 		return (MagicSpaceRegionViewItem) magicDao.getObject(MagicSpaceRegionViewItem.class, itemId);
+	}
+	public Boolean saveChoice(MagicChoice choice){
+		ServiceUtil.notNull(choice, "choice is null");
+		ServiceUtil.notNull(choice.getChoiceName(), "choice.choiceName is null");
+		return magicDao.save(choice);
+	}
+	public MagicChoice getChoiceById(String choiceId) {
+		ServiceUtil.notNull(choiceId, "choiceId is null");
+		return (MagicChoice) magicDao.getObject(MagicChoice.class, choiceId);
 	}
 }

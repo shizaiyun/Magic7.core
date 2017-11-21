@@ -33,7 +33,6 @@ public class MagicSpaceHandler {
 	private MagicSpaceHandler() {}
 	public static List<MagicDimension> listDimension(String spaceName,String regionName,String viewName,String dimensionNames,Integer destination) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
-		ServiceUtil.notNull(regionName, "regionName is null");
 		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
 		List<MagicDimension>  dimensions = service.listDimension(null, null, null, spaceRegion.getName(), viewName, destination, " seq ");
 		if(StringUtils.isEmpty(dimensionNames))

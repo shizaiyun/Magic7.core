@@ -244,8 +244,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(item.getName(), "item.name is null");
 		ServiceUtil.notNull(item.getSpaceId(), "item.spaceId is null");
 		ServiceUtil.notNull(item.getSpaceName(), "item.spaceName is null");
-		ServiceUtil.notNull(item.getSpaceRegionId(), "item.spaceId is null");
-		ServiceUtil.notNull(item.getSpaceRegionName(), "item.spaceName is null");
+		ServiceUtil.notNull(item.getSpaceRegionId(), "item.spaceRegionId is null");
+		ServiceUtil.notNull(item.getSpaceRegionName(), "item.spaceRegionName is null");
 		if(StringUtils.isEmpty(item.getLayout()))
 			item.setLayout(MagicSpaceRegionView.Layout.NORMAL.getName());
 		return magicDao.saveSpaceRegionViewItem(item);

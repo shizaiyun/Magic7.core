@@ -353,14 +353,19 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(regionId, "regionId is null");
 		return (MagicSpaceRegion) magicDao.getObject(MagicSpaceRegion.class, regionId);
 	}
-
 	@Override
 	public List<MagicChoiceItem> listChoiceItem(String name, String code) {
 		return magicDao.listChoiceItem(name, code);
 	}
-
 	public List<MagicSpaceRegionView> listSpaceRegionView(String spaceName,String regionName) {
 		return magicDao.listSpaceRegionView(spaceName, regionName);
 	}
-
+	public MagicSpaceRegionView getViewById(String viewId) {
+		ServiceUtil.notNull(viewId, "viewId is null");
+		return (MagicSpaceRegionView) magicDao.getObject(MagicSpaceRegionView.class, viewId);
+	}
+	public MagicSpaceRegionViewItem getViewItemById(String itemId) {
+		ServiceUtil.notNull(itemId, "itemId is null");
+		return (MagicSpaceRegionViewItem) magicDao.getObject(MagicSpaceRegionViewItem.class, itemId);
+	}
 }

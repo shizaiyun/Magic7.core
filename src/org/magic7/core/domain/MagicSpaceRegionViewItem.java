@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.magic7.core.dao.Magic7IdGenerator;
+import org.magic7.core.dao.MagicDao;
 import org.magic7.core.service.ServiceStaticInfo;
 
 @Entity
@@ -130,6 +131,9 @@ public class MagicSpaceRegionViewItem {
 	}
 	public void setDimensionId(String dimensionId) {
 		this.dimensionId = dimensionId;
+	}
+	public MagicDimension getDimension() {
+		return MagicDao.getInstance().getDimensionById(dimensionId);
 	}
 	public String getUrl() {
 		return url;

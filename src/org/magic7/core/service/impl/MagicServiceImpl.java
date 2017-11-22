@@ -385,4 +385,8 @@ public class MagicServiceImpl implements MagicService {
 	public List<MagicChoice> listChoice(String name, String code) {
 		return magicDao.listChoice(name, code);
 	}
+	public MagicChoiceItem getChoiceItemById(String choiceItemId) {
+		ServiceUtil.notNull(choiceItemId, "choiceItemId is null");
+		return (MagicChoiceItem) magicDao.getObject(MagicChoiceItem.class, choiceItemId);
+	}
 }

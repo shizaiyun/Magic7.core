@@ -411,6 +411,12 @@ public class MagicDimension {
 	public Integer getQueryType() {
 		return queryType;
 	}
+	public String getQueryTypeName() {
+		QueryType type = QueryType.getQueryType(queryType);
+		if(type==null)
+			return null;
+		return type.name;
+	}
 	public void setQueryType(Integer queryType) {
 		this.queryType = queryType;
 	}

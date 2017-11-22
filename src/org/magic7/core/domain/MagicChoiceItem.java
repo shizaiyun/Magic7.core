@@ -36,7 +36,6 @@ public class MagicChoiceItem {
 	@Column(name = "VALUE_NAME", length = 128)
 	private String valueName;
 	
-	
 	@Column(name = "COLOR", length = 20)
 	private String color;
 	

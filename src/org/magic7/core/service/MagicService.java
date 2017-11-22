@@ -82,4 +82,5 @@ public interface MagicService {
 	public List<MagicChoice> listChoice(String name, String code);
 	public MagicChoice getChoiceById(String choiceId);
 	public Boolean saveChoice(MagicChoice choice);
+	public MagicChoiceItem getChoiceItemById(String choiceItemId);
 }

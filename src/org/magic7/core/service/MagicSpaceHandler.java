@@ -555,7 +555,9 @@ public class MagicSpaceHandler {
   }
 	
 	public static MagicObject createSupplementMagicObject(String objectId) {
+		ServiceUtil.notNull(objectId, "objectId is null");
 		MagicObject object = service.getMagicObjectById(objectId);
+		ServiceUtil.notNull(object, "object is null");
 		ServiceUtil.notNull(object.getSpaceId(), "object.spaceId is null");
 		DaoAssistant.closeSessionByService();
 		DaoAssistant.currentSession(false);

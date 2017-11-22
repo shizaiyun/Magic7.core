@@ -739,4 +739,15 @@ public class MagicDao extends BaseDao {
 		hql.append(" order by r.seq asc");
 		return super.list(hql.toString(), params, 0, 10000);
 	}
+	@SuppressWarnings("unchecked")
+	public List<MagicSpaceRegion> listSupplementSpaceRegion(String objectId, String spaceId, String orderBy,Integer start, Integer count) {
+		StringBuilder sql = new StringBuilder("select a.* from "+ServiceStaticInfo.TABLE_PREFIX+"_SPACE_REGION a where a.space_id=:spaceId and not exists (select 1 from "+ServiceStaticInfo.TABLE_PREFIX+"_OBJECT_REGION b where a.space_id=b.space_id and a.id =b.space_region_id and b.OBJECT_ID=:objectId)");
+		Map<String,Object> params = new HashMap<String,Object>();
+			params.put("objectId", objectId);
+			params.put("spaceId", spaceId);
+		if(StringUtils.isNotEmpty(orderBy)) {
+			sql.append(" order by "+orderBy);
+		}
+		return super.listWithSql(sql.toString(), params, "", MagicSpaceRegion.class.getCanonicalName(), start, count);
+	}
 }

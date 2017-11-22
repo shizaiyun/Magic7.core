@@ -378,4 +378,9 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(choiceId, "choiceId is null");
 		return (MagicChoice) magicDao.getObject(MagicChoice.class, choiceId);
 	}
+	@Override
+	public List<MagicSpaceRegion> listSupplementSpaceRegion(String objectId, String spaceId, String orderBy,
+			Integer start, Integer count) {
+		return magicDao.listSupplementSpaceRegion(objectId, spaceId, orderBy, start, count);
+	}
 }

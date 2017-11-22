@@ -103,7 +103,7 @@ public class MagicDimension {
 			this.name = name;
 			this.code = code;
 		}
-		public static PageType getQueryType(Integer code) {
+		public static PageType getPageType(Integer code) {
 			PageType[] types = values();
 			for(PageType type:types) {
 				if(type.code.intValue()==code.intValue())
@@ -141,6 +141,9 @@ public class MagicDimension {
 			this.code = code;
 		}
 		public static QueryType getQueryType(Integer code) {
+			if(code == null) {
+				return null;
+			}
 			QueryType[] types = values();
 			for(QueryType type:types) {
 				if(type.code.intValue()==code.intValue())

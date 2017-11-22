@@ -538,14 +538,14 @@ public class MagicSpaceHandler {
 		return service.saveCodeLib(lib);
 	}
 	
-	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,Map<String,String> conditionPairs) {
+	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,Map<String,Object> conditionPairs) {
         ServiceUtil.notNull(spaceName, "spaceName is null");
         ServiceUtil.notNull(regionName, "regionName is null");
         ServiceUtil.notNull(conditionPairs, "conditionPairs is null");
         List<MagicDimension> queryConditions = new ArrayList<>();
-        Set<Entry<String,String>> entrySet = conditionPairs.entrySet();
-        for (Entry<String, String> entry : entrySet) {
-               if(StringUtils.isNotBlank(entry.getValue())) {
+        Set<Entry<String,Object>> entrySet = conditionPairs.entrySet();
+        for (Entry<String, Object> entry : entrySet) {
+               if(entry.getValue() != null && StringUtils.isNotBlank(entry.getValue().toString())) {
                       MagicDimension query = service.getDimension(spaceName, regionName, entry.getKey(), MagicDimension.Destination.FOR_QUERY.getCode());
                       query.setQueryCondition(entry.getValue());
                       queryConditions.add(query);

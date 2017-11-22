@@ -6,6 +6,7 @@ import java.util.Map;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
+import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.domain.MagicObject;
@@ -78,4 +79,7 @@ public interface MagicService {
 	public MagicSpaceRegionView getViewById(String viewId);
 	public MagicSpaceRegionViewItem getViewItemById(String itemId);
 	public List<MagicSpaceRegion> listSupplementSpaceRegion(String objectId,String spaceId,String orderBy,Integer start, Integer count);
+	public List<MagicChoice> listChoice(String name, String code);
+	public MagicChoice getChoiceById(String choiceId);
+	public Boolean saveChoice(MagicChoice choice);
 }

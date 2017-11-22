@@ -736,7 +736,6 @@ public class MagicDao extends BaseDao {
 			hql.append(" and r.choiceCode=:choiceCode");
 			params.put("choiceCode", code);
 		}
-		hql.append(" order by r.seq asc");
 		return super.list(hql.toString(), params, 0, 10000);
 	}
 	@SuppressWarnings("unchecked")

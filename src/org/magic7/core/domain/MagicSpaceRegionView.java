@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.magic7.core.dao.Magic7IdGenerator;
+import org.magic7.core.domain.MagicDimension.Destination;
 import org.magic7.core.service.ServiceStaticInfo;
 
 @Entity
@@ -76,6 +77,9 @@ public class MagicSpaceRegionView {
 	@Column(name = "LAYOUT", length = 100)
 	private String layout;
 	
+	@Column(name = "DESTINATION")
+	private Integer destination = 0;
+	
 	public String getId() {
 		return id;
 	}
@@ -118,5 +122,16 @@ public class MagicSpaceRegionView {
 	public void setLayout(String layout) {
 		this.layout = layout;
 	}
-	
+	public Integer getDestination() {
+		return destination;
+	}
+	public String getDestinationName() {
+		Destination d = MagicDimension.Destination.getDestination(destination);
+		if(d==null)
+			return null;
+		return d.getName();
+	}
+	public void setDestination(Integer destination) {
+		this.destination = destination;
+	}
 }

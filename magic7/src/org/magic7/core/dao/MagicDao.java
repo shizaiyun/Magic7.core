@@ -50,7 +50,7 @@ public class MagicDao extends BaseDao {
 	}
 	private void buildMagicDimension(StringBuilder hql,String spaceId,String spaceName,String spaceRegionId, String spaceRegionName, String viewName, Integer destination, Map<String,Object> params) {
 		if(destination!=null) {
-			hql.append(" and DESTINATION=:destination");
+			hql.append(" and a.DESTINATION=:destination");
 			params.put("destination", destination);
 		} else 
 			hql.append(" and (destination is null or destination=0 ) ");

@@ -149,18 +149,36 @@ public class MagicSpaceHandler {
 			ServiceUtil.notNull(value,item.getDisplayName()+"'s value is null");
 		if(item.getViewItem()!=null&&item.getViewItem().getRequired()!=null&&item.getViewItem().getRequired())
 			ServiceUtil.notNull(value,item.getDisplayName()+"'s value is null");
-		if(value==null) 
-			return ;
 		if(MagicDimension.ValueType.STR_VALUE.getCode().equals(item.getValueType()))
-			item.setStrValue(value.toString());
+			if(value==null) {
+				item.setStrValue(null);
+			}else {
+				item.setStrValue(value.toString());
+			}
 		else if(MagicDimension.ValueType.DATE_VALUE.getCode().equals(item.getValueType()))
-			item.setDateValue((Date) value);
+			if(value==null) {
+				item.setDateValue(null);
+			}else {
+				item.setDateValue((Date) value);
+			}
 		else if(MagicDimension.ValueType.NUM_VALUE.getCode().equals(item.getValueType()))
-			item.setNumValue((BigDecimal) value);
+			if(value==null) {
+				item.setNumValue(null);
+			}else {
+				item.setNumValue((BigDecimal) value);
+			}
 		else if(MagicDimension.ValueType.BOOLEAN_VALUE.getCode().equals(item.getValueType()))
-			item.setBooleanValue((Boolean) value);
+			if(value==null) {
+				item.setBooleanValue(null);
+			}else {
+				item.setBooleanValue((Boolean) value);
+			}
 		else if(MagicDimension.ValueType.LIST_STR_VALUE.getCode().equals(item.getValueType()))
-			item.setListStrValue(","+(String) value+",");
+			if(value==null) {
+				item.setListStrValue(null);
+			}else {
+				item.setListStrValue(","+(String) value+",");
+			}
 	}
 	public static Object getRowItemValue(MagicSuperRowItem item) {
 		ServiceUtil.notNull(item, "item is null");
@@ -538,15 +556,19 @@ public class MagicSpaceHandler {
 		return service.saveCodeLib(lib);
 	}
 	
-	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,Map<String,Object> conditionPairs) {
+	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,String queryView,Map<String,Object> conditionPairs) {
         ServiceUtil.notNull(spaceName, "spaceName is null");
         ServiceUtil.notNull(regionName, "regionName is null");
         ServiceUtil.notNull(conditionPairs, "conditionPairs is null");
+        MagicDimension.Destination destination = MagicDimension.Destination.FOR_QUERY; 
+        if(StringUtils.isBlank(queryView)) {
+        	destination=MagicDimension.Destination.FOR_DATA;
+        }
         List<MagicDimension> queryConditions = new ArrayList<>();
         Set<Entry<String,Object>> entrySet = conditionPairs.entrySet();
         for (Entry<String, Object> entry : entrySet) {
                if(entry.getValue() != null && StringUtils.isNotBlank(entry.getValue().toString())) {
-                      MagicDimension query = service.getDimension(spaceName, regionName, entry.getKey(), MagicDimension.Destination.FOR_QUERY.getCode());
+                      MagicDimension query = service.getDimension(spaceName, regionName, entry.getKey(), destination.getCode());
                       query.setQueryCondition(entry.getValue());
                       queryConditions.add(query);
                }

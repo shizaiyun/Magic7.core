@@ -311,7 +311,6 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(codeLnk.getRegionName(), "codeLnk.regionName is null");
 		ServiceUtil.notNull(codeLnk.getCodeLidId(), "codeLnk.codeLibId is null");
 		ServiceUtil.notNull(codeLnk.getCodeName(), "codeLnk.codeName is null");
-		ServiceUtil.notNull(codeLnk.getParameterNames(), "codeLnk.parameterNames is null");
 		ServiceUtil.notNull(codeLnk.getSignature(), "codeLnk.signature is null");
 		return magicDao.saveReginCodeLnk(codeLnk);
 	}
@@ -389,5 +388,11 @@ public class MagicServiceImpl implements MagicService {
 	}
 	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count) {
 		return magicDao.listCodeLib(name, description, codeType, orderBy, start, count);
+	}
+	public Boolean deleteCodeLnk(String codeId,String spaceName,String regionName) {
+		ServiceUtil.notNull(codeId, "codeId is null");
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		ServiceUtil.notNull(regionName, "regionName is null");
+		return magicDao.deleteCodeLnk(codeId, spaceName, regionName);
 	}
 }

@@ -84,4 +84,5 @@ public interface MagicService {
 	public Boolean saveChoice(MagicChoice choice);
 	public MagicChoiceItem getChoiceItemById(String choiceItemId);
 	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count);
+	public Boolean deleteCodeLnk(String codeId,String spaceName,String regionName);
 }

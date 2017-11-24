@@ -91,13 +91,14 @@ public class MagicUtil {
 		}
 		service.saveSpaceRegionViewItem(viewItem);
 	}
-	public static MagicSpaceRegionView createView(MagicSpace space,MagicSpaceRegion spaceRegion,String viewName) {
+	public static MagicSpaceRegionView createView(MagicSpace space,MagicSpaceRegion spaceRegion,String viewName, Integer destination) {
 		MagicSpaceRegionView view = new MagicSpaceRegionView();
 		view.setSpaceId(space.getId());
 		view.setSpaceRegionId(spaceRegion.getId());
 		view.setName(viewName);
 		view.setSpaceName(space.getName());
 		view.setSpaceRegionName(spaceRegion.getName());
+		view.setDestination(destination);
 		service.saveSpaceRegionView(view);
 		return view;
 	}

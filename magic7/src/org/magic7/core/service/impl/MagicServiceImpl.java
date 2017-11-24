@@ -316,8 +316,6 @@ public class MagicServiceImpl implements MagicService {
 		return magicDao.saveReginCodeLnk(codeLnk);
 	}
 	public List<MagicCodeLib> listCodeLib(String spaceName,String regionName, Integer codeType) {
-		ServiceUtil.notNull(spaceName, "spaceName is null");
-		ServiceUtil.notNull(regionName, "regionName is null");
 		return magicDao.listCodeLib(spaceName, regionName, codeType);
 	}
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) {

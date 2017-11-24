@@ -77,6 +77,12 @@ public class MagicSpaceRegionViewItem {
 	
 	@Column(name = "BUSINESS_TRIGGERS",length = 300)
 	private String businessTriggers;
+	
+	@Column(name = "CHOICE_CODE",length = 64)
+	private String choiceCode;
+	
+	@Column(name = "CHOICE_NAME",length = 300)
+	private String choiceName;
 
 	public String getId() {
 		return id;
@@ -194,5 +200,17 @@ public class MagicSpaceRegionViewItem {
 	}
 	public void setBusinessTriggers(String businessTriggers) {
 		this.businessTriggers = businessTriggers;
+	}
+	public String getChoiceCode() {
+		return choiceCode;
+	}
+	public void setChoiceCode(String choiceCode) {
+		this.choiceCode = choiceCode;
+	}
+	public String getChoiceName() {
+		return choiceName;
+	}
+	public void setChoiceName(String choiceName) {
+		this.choiceName = choiceName;
 	}
 }

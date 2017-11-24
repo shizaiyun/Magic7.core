@@ -635,7 +635,7 @@ public class MagicDao extends BaseDao {
 		return (MagicRegionCodeLnk) super.getObject(hql.toString(), params);
 	}
 	@SuppressWarnings("unchecked")
-	public List<MagicCodeLib> listCodeLib(String spaceName,String regionName, Integer codeType) {
+	public List<MagicCodeLib> listCodeLibWithLnk(String spaceName,String regionName, Integer codeType) {
 		StringBuilder hql = new StringBuilder("select lib from MagicCodeLib lib,MagicRegionCodeLnk lnk where lib.id=lnk.codeLidId"); 
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(StringUtils.isNotEmpty(spaceName)) {
@@ -646,11 +646,31 @@ public class MagicDao extends BaseDao {
 			hql.append(" and lnk.regionName=:regionName");
 			params.put("regionName", regionName);
 		}
-		if(StringUtils.isNotEmpty(regionName)) {
+		if(codeType!=null) {
 			hql.append(" and lib.codeType=:codeType");
 			params.put("codeType", codeType);
 		}
 		return super.list(hql.toString(), params,0,10000);
+	}
+	@SuppressWarnings("unchecked")
+	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count) {
+		StringBuilder hql = new StringBuilder(" from MagicCodeLib where 1=1"); 
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(StringUtils.isNotEmpty(name)) {
+			hql.append(" and name=:name");
+			params.put("name", name);
+		}
+		if(StringUtils.isNotEmpty(description)) {
+			hql.append(" and description=:description");
+			params.put("description", description);
+		}
+		if(codeType!=null) {
+			hql.append(" and codeType=:codeType");
+			params.put("codeType", codeType);
+		}
+		if(StringUtils.isNotEmpty(orderBy))
+			hql.append(" order by "+orderBy);
+		return super.list(hql.toString(), params,start,count);
 	}
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) {
 		StringBuilder hql = new StringBuilder("select count(*) from "+partition+"_ROW_ITEM a where ");

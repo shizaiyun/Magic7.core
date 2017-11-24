@@ -69,7 +69,7 @@ public interface MagicService {
 	public MagicCodeLib getCodeLibById(String id);
 	public MagicRegionCodeLnk getCodeLnk(String spaceName,String regionName, String signature) ;
 	public Boolean saveReginCodeLnk(MagicRegionCodeLnk codeLnk);
-	public List<MagicCodeLib> listCodeLib(String spaceName,String regionName, Integer codeType);
+	public List<MagicCodeLib> listCodeLibWithLnk(String spaceName,String regionName, Integer codeType);
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) ;
 	public List<MagicSuperRowItem> getRowItem(String partition,String spaceName,String regionName,String displayName,Object value);
 	public MagicCodeLib getJavaCodeLibBySignature(String signature) ;
@@ -83,4 +83,5 @@ public interface MagicService {
 	public MagicChoice getChoiceById(String choiceId);
 	public Boolean saveChoice(MagicChoice choice);
 	public MagicChoiceItem getChoiceItemById(String choiceItemId);
+	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count);
 }

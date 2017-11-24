@@ -38,6 +38,10 @@ public class MagicLoaderUtils {
 		CtClass cls = pool.makeClass(classPath);
 		try {
 			cls.setSuperclass(pool.get("org.magic7.core.service.MagicRegionShell"));
+			pool.importPackage("org.magic7.core.domain.MagicSuperRowItem");
+			pool.importPackage("org.apache.commons.lang.StringUtils");
+			pool.importPackage("org.magic7.utils.ServiceUtil");
+			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			if(codeLib.getPackages()!=null) {
 				String packages[] = codeLib.getPackages().split(";");
 				for(String packagE:packages) 
@@ -57,7 +61,12 @@ public class MagicLoaderUtils {
 		CtClass cls = pool.makeClass(classPath);
 		try {
 			cls.setSuperclass(pool.get("org.magic7.core.service.MagicRegionShell"));
-			List<MagicCodeLib> libs = service.listCodeLib(spaceName, regionName, MagicCodeLib.CodeType.JAVA.getCode());
+			List<MagicCodeLib> libs = service.listCodeLibWithLnk(spaceName, regionName, MagicCodeLib.CodeType.JAVA.getCode());
+			
+			pool.importPackage("org.magic7.core.domain.MagicSuperRowItem");
+			pool.importPackage("org.apache.commons.lang.StringUtils");
+			pool.importPackage("org.magic7.utils.ServiceUtil");
+			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			for(MagicCodeLib codeLib:libs) {
 				if(codeLib.getPackages()!=null) {
 					String packages[] = codeLib.getPackages().split(";");
@@ -73,7 +82,7 @@ public class MagicLoaderUtils {
 		}
 	}
 	public static String generateJsScript(String spaceName,String regionName) {
-		List<MagicCodeLib> libs = service.listCodeLib(spaceName, regionName, MagicCodeLib.CodeType.JS.getCode());
+		List<MagicCodeLib> libs = service.listCodeLibWithLnk(spaceName, regionName, MagicCodeLib.CodeType.JS.getCode());
 		String script = "";
 		for(MagicCodeLib codeLib:libs) {
 			script+=codeLib.getCode();

@@ -111,6 +111,12 @@ public class MagicCodeLib {
 	public Integer getCodeType() {
 		return codeType;
 	}
+	public String getCodeTypeName() {
+		CodeType type = CodeType.getCodeType(codeType);
+		if(type==null)
+			return null;
+		return type.name;
+	}
 	public void setCodeType(Integer codeType) {
 		this.codeType = codeType;
 	}

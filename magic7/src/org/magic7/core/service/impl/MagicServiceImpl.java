@@ -315,8 +315,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(codeLnk.getSignature(), "codeLnk.signature is null");
 		return magicDao.saveReginCodeLnk(codeLnk);
 	}
-	public List<MagicCodeLib> listCodeLib(String spaceName,String regionName, Integer codeType) {
-		return magicDao.listCodeLib(spaceName, regionName, codeType);
+	public List<MagicCodeLib> listCodeLibWithLnk(String spaceName,String regionName, Integer codeType) {
+		return magicDao.listCodeLibWithLnk(spaceName, regionName, codeType);
 	}
 	public Boolean isFreshValue(String partition,String spaceName,String regionName,String displayName,String value) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
@@ -386,5 +386,8 @@ public class MagicServiceImpl implements MagicService {
 	public MagicChoiceItem getChoiceItemById(String choiceItemId) {
 		ServiceUtil.notNull(choiceItemId, "choiceItemId is null");
 		return (MagicChoiceItem) magicDao.getObject(MagicChoiceItem.class, choiceItemId);
+	}
+	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count) {
+		return magicDao.listCodeLib(name, description, codeType, orderBy, start, count);
 	}
 }

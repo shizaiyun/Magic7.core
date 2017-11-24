@@ -15,8 +15,14 @@ public class MagicRegionShell {
 	public static final String YYYY_MM_DD_HH_mm = "yyyy-MM-dd HH:mm:ss";
 	public static final String YYYY_MM_DD = "yyyy-MM-dd";
 	
-	public boolean saveRow(MagicRegionRow row) {
+	public boolean saveRowAndRowItem(MagicRegionRow row) {
 		return MagicSpaceHandler.saveRow(row);
+	}
+	public boolean saveRow(MagicRegionRow row) {
+		return service.saveRow(row);
+	}
+	public static MagicRegionRow cloneRow(MagicRegionRow source) {
+		return MagicSpaceHandler.cloneRow(source);
 	}
 	public boolean saveRowItem(MagicSuperRowItem rowItem) {
 		return service.saveRowItem(rowItem);

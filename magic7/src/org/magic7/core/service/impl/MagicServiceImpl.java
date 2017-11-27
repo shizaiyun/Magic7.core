@@ -13,6 +13,7 @@ import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
+import org.magic7.core.domain.MagicTriggerAssembler;
 import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
@@ -123,7 +124,6 @@ public class MagicServiceImpl implements MagicService {
 			String regionName, String viewName,String displayName,String orderBy,Integer start, Integer count) {
 		return magicDao.listRowItem(partition, spaceName,regionName, viewName,displayName,orderBy, start, count);
 	}
-	
 	public MagicObjectRegion getObjectRegion(String objectId,String spaceRegionName){
 		ServiceUtil.notNull(objectId, "objectId is null");
 		ServiceUtil.notNull(spaceRegionName, "businessType is null");
@@ -277,7 +277,6 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(choiceItem.getValueName(), "choiceItem.valueName is null");
 		return magicDao.saveChoiceItem(choiceItem);
 	}
-	
 	public MagicSpaceRegionView getSpaceRegionView(String spaceName,String dimensionRegionName,
 			String viewName) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
@@ -285,14 +284,12 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(viewName, "viewName is null");
 		return magicDao.getSpaceRegionView(spaceName, dimensionRegionName, viewName);
 	}
-	@Override
 	public Boolean saveCodeLib(MagicCodeLib lib) {
 		ServiceUtil.notNull(lib, "lib is null");
 		if(MagicCodeLib.CodeType.JAVA.getCode().equals(lib.getCodeType())) 
 			ServiceUtil.notNull(lib.getSignature(), "lib.signature is null");
 		return magicDao.saveCodeLib(lib);
 	}
-	@Override
 	public MagicCodeLib getCodeLibById(String id) {
 		return magicDao.getCodeLibById(id);
 	}
@@ -302,7 +299,6 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(signature, "signature is null");
 		return magicDao.getCodeLnk(spaceName, regionName, signature);
 	}
-	@Override
 	public Boolean saveReginCodeLnk(MagicRegionCodeLnk codeLnk) {
 		ServiceUtil.notNull(codeLnk, "codeLnk is null");
 		ServiceUtil.notNull(codeLnk.getSpaceId(), "codeLnk.spaceId is null");
@@ -339,7 +335,6 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(signature, "signature is null");
 		return magicDao.getJavaCodeLibBySignature(signature);
 	}
-	@Override
 	public List<MagicSpace> listSpace(String spaceName, String orderBy, Integer start, Integer count) {
 		return magicDao.listSpace(spaceName, orderBy, start, count);
 	}
@@ -351,7 +346,6 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(regionId, "regionId is null");
 		return (MagicSpaceRegion) magicDao.getObject(MagicSpaceRegion.class, regionId);
 	}
-	@Override
 	public List<MagicChoiceItem> listChoiceItem(String name, String code) {
 		return magicDao.listChoiceItem(name, code);
 	}
@@ -394,5 +388,29 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
 		return magicDao.deleteCodeLnk(codeId, spaceName, regionName);
+	}
+	public MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
+		ServiceUtil.notNull(triggerName, "triggerName is null");
+		ServiceUtil.notNull(codeLibId, "codeLibId is null");
+		ServiceUtil.notNull(dimensionId, "dimensionId is null");
+		ServiceUtil.notNull(seq, "seq is null");
+		return magicDao.getMagicTriggerAssembler(triggerName, codeLibId, dimensionId, seq);
+	}
+	public List<MagicTriggerAssembler> listMagicTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy) {
+		ServiceUtil.notNull(triggerName, "triggerName is null");
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		return magicDao.listMagicTriggerAssembler(triggerName, spaceName, regionName, orderBy);
+	}
+	public Boolean saveTriggerAssembler(MagicTriggerAssembler assembler) {
+		ServiceUtil.notNull(assembler, "assembler is null");
+		ServiceUtil.notNull(assembler.getCodeLibId(), "assembler.codeLibId is null");
+		ServiceUtil.notNull(assembler.getTriggerName(), "assembler.triggerName is null");
+		ServiceUtil.notNull(assembler.getDimensionId(), "assembler.dimensionId is null");
+		ServiceUtil.notNull(assembler.getSpaceName(), "assembler.spaceName is null");
+		ServiceUtil.notNull(assembler.getRegionName(), "assembler.regionName is null");
+		ServiceUtil.notNull(assembler.getDisplayName(), "assembler.displayName is null");
+		ServiceUtil.notNull(assembler.getSignature(), "assembler.signature is null");
+		ServiceUtil.notNull(assembler.getCodeName(), "assembler.codeName is null");
+		return magicDao.save(assembler);
 	}
 }

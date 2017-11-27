@@ -10,6 +10,7 @@ import org.magic7.core.domain.MagicSpace;
 import org.magic7.core.domain.MagicSpaceRegion;
 import org.magic7.core.domain.MagicSpaceRegionView;
 import org.magic7.core.domain.MagicSpaceRegionViewItem;
+import org.magic7.core.domain.MagicTriggerAssembler;
 import org.magic7.core.domain.MagicRegionCodeLnk;
 import org.magic7.core.service.MagicSpaceHandler;
 import org.magic7.core.service.impl.MagicServiceImpl;
@@ -182,5 +183,27 @@ public class MagicUtil {
 		}
 		dimension.setChoiceName(choiceName);
 		dimension.setChoiceCode(choiceCode);
+	}
+	public static MagicTriggerAssembler bindTrigger(String triggerName,MagicCodeLib lib,MagicDimension dimension,Integer seq) {
+		ServiceUtil.notNull(triggerName, "triggerName is null");
+		ServiceUtil.notNull(lib, "lib is null");
+		ServiceUtil.notNull(dimension, "dimension is null");
+		ServiceUtil.notNull(seq, "seq is null");
+		MagicTriggerAssembler assembler = service.getTriggerAssembler(triggerName, lib.getId(), dimension.getId(), seq);
+		if(assembler==null) {
+			assembler = new MagicTriggerAssembler();
+			assembler.setCodeLibId(lib.getId());
+			assembler.setCodeName(lib.getName());
+			assembler.setDimensionId(dimension.getId());
+			assembler.setDisplayName(dimension.getDisplayName());
+			assembler.setRegionName(dimension.getSpaceRegionName());
+			assembler.setSpaceName(dimension.getSpaceName());
+			assembler.setSeq(seq);
+			assembler.setSignature(lib.getSignature());
+			assembler.setTriggerName(triggerName);
+			assembler.setParameterNames(lib.getParameterNames());
+			service.saveTriggerAssembler(assembler);
+		}
+		return assembler;
 	}
 }

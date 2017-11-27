@@ -318,9 +318,6 @@ public class MagicDimension {
 	@Column(name = "TAIL_LABEL",length = 100)
 	private String tailLabel;//page element前的说明标签
 	
-	@Column(name = "BUSINESS_TRIGGERS",length = 1000)
-	private String businessTriggers;
-	
 	@Column(name = "BUTTON_TRIGGER",length = 300)
 	private String buttonTrigger;//当destination为FOR_BUTTON时有效,用来定义button的触发事件
 	
@@ -569,12 +566,6 @@ public class MagicDimension {
 	}
 	public void setEditable(Boolean editable) {
 		this.editable = editable;
-	}
-	public String getBusinessTriggers() {
-		return businessTriggers;
-	}
-	public void setBusinessTriggers(String businessTriggers) {
-		this.businessTriggers = businessTriggers;
 	}
 	public String getButtonTrigger() {
 		return buttonTrigger;

@@ -389,14 +389,14 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(regionName, "regionName is null");
 		return magicDao.deleteCodeLnk(codeId, spaceName, regionName);
 	}
-	public MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
+	public MagicTriggerAssembler getTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
 		ServiceUtil.notNull(triggerName, "triggerName is null");
 		ServiceUtil.notNull(codeLibId, "codeLibId is null");
 		ServiceUtil.notNull(dimensionId, "dimensionId is null");
 		ServiceUtil.notNull(seq, "seq is null");
-		return magicDao.getMagicTriggerAssembler(triggerName, codeLibId, dimensionId, seq);
+		return magicDao.getTriggerAssembler(triggerName, codeLibId, dimensionId, seq);
 	}
-	public List<MagicTriggerAssembler> listMagicTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy) {
+	public List<MagicTriggerAssembler> listTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy) {
 		ServiceUtil.notNull(triggerName, "triggerName is null");
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		return magicDao.listMagicTriggerAssembler(triggerName, spaceName, regionName, orderBy);

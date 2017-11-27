@@ -428,7 +428,6 @@ public class MagicDao extends BaseDao {
 	@SuppressWarnings("unchecked")
 	public List<MagicRegionRow> listRow(String partition,String spaceName,String regionName,String displayName,String objectId,
 			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count) {
-		System.out.println("count partition:"+partition);
 		if(StringUtils.isEmpty(partition))
 			partition = ServiceStaticInfo.TABLE_PREFIX;
 		MagicSpaceRegion spaceRegion = getSpaceRegion(spaceName, regionName);
@@ -778,8 +777,8 @@ public class MagicDao extends BaseDao {
 		params.put("regionName", regionName);
 		return super.delete(hql,params);
 	}
-	public MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
-		String hql = "from MagicTriggerAssembler where codeLidId=:codeLibId and triggerName=:triggerName and dimensionId=:dimensionId and seq=:seq";
+	public MagicTriggerAssembler getTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
+		String hql = "from MagicTriggerAssembler where codeLibId=:codeLibId and triggerName=:triggerName and dimensionId=:dimensionId and seq=:seq";
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("codeLibId", codeLibId);
 		params.put("triggerName", triggerName);

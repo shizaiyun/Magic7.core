@@ -25,7 +25,6 @@ import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
 import org.magic7.core.domain.MagicSpaceRegion;
-import org.magic7.core.domain.MagicRegionCodeLnk;
 import org.magic7.dynamic.loader.MagicLoaderUtils;
 import org.magic7.utils.Dates;
 import org.magic7.utils.ServiceUtil;
@@ -457,45 +456,33 @@ public class MagicSpaceHandler {
 	}
 	public static Boolean executeTrigger(MagicRegionRow row ,String trigger,Map<String, Object> params) throws Exception {
 		ServiceUtil.notNull(row, "items is null");
-		String triggers = null;
-		String triggerItems[] = null;
-		List<MagicSuperRowItem> items = row.getRowItems();
-		for(int x=0;x<items.size();x++) {
-			MagicSuperRowItem item=items.get(x);
-			triggers = item.getBusinessTriggers();
-			if(StringUtils.isEmpty(triggers))
-				continue;
-			triggerItems = triggers.split("\\|");
-			for(String triggerItem:triggerItems) {
-				try {
-					String pairs[] = triggerItem.split(":");
-					if(pairs.length==2) {
-						if(trigger.equals(pairs[0])) {
-							System.out.println("function:"+item.getDisplayName()+":"+pairs[0]);
-							MagicRegionCodeLnk codeLnk = service.getCodeLnk(item.getSpaceName(), item.getRegionName(), pairs[1]);
-							String parameterNames = codeLnk.getParameterNames();
-							Object[] inParams = null;
-							if(StringUtils.isNotEmpty(parameterNames)) {
-								String names[] = parameterNames.split(",");
-								inParams = new Object[names.length];
-								for(int i=0;i<names.length;i++) {
-									if(i==0&&"defaultRowItem".equals(names[i]))
-										inParams[i] = item;
-									else if(i==0&&"defaultRow".equals(names[i]))
-										inParams[i] = row;
-									else
-										inParams[i] = params.get(names[i]);
-								}
-							}
-							MagicLoaderUtils.invokeRegionCode(item.getSpaceName(), item.getRegionName(),codeLnk.getCodeName() , inParams);
-						}
+		List<MagicTriggerAssembler> assemblers = service.listTriggerAssembler(trigger, row.getSpaceName(), row.getRegionName(), " seq ");
+		String codeName = null;
+		String displayName = null;
+		try {
+			for(MagicTriggerAssembler assembler:assemblers) {
+				System.out.println("assembler:"+assembler.getCodeName());
+				String parameterNames = assembler.getParameterNames();
+				displayName = assembler.getDisplayName();
+				Object[] inParams = null;
+				if(StringUtils.isNotEmpty(parameterNames)) {
+					String names[] = parameterNames.split(",");
+					inParams = new Object[names.length];
+					for(int i=0;i<names.length;i++) {
+						if(i==0&&"defaultRowItem".equals(names[i]))
+							inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
+						else if(i==0&&"defaultRow".equals(names[i]))
+							inParams[i] = row;
+						else
+							inParams[i] = params.get(names[i]);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("space-"+item.getSpaceName()+"-region-"+item.getSpaceRegionName()+"-rowId-"+item.getRowId()+"-displayName-"+item.getDisplayName()+" occur exception:"+e.getMessage());
 				}
+				MagicLoaderUtils.invokeRegionCode(row.getSpaceName(), row.getRegionName(),assembler.getCodeName() , inParams);
 			}
-		} 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("invoke "+row.getSpaceName()+"-"+row.getRegionName()+"-"+codeName+" on "+displayName+" failed");
+		}
 		return true;
 	}
 	public static List<MagicSuperRowItem> listRowItem(String spaceName,
@@ -610,27 +597,6 @@ public class MagicSpaceHandler {
 			DaoAssistant.closeSessionByService();
 		}
 		return object;
-	}
-	public static MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,MagicCodeLib lib,MagicDimension dimension,Integer seq) {
-		ServiceUtil.notNull(triggerName, "triggerName is null");
-		ServiceUtil.notNull(lib, "lib is null");
-		ServiceUtil.notNull(dimension, "dimension is null");
-		ServiceUtil.notNull(seq, "seq is null");
-		MagicTriggerAssembler assembler = service.getMagicTriggerAssembler(triggerName, lib.getId(), dimension.getId(), seq);
-		if(assembler==null) {
-			assembler = new MagicTriggerAssembler();
-			assembler.setCodeLibId(lib.getId());
-			assembler.setCodeName(lib.getName());
-			assembler.setDimensionId(dimension.getId());
-			assembler.setDisplayName(dimension.getDisplayName());
-			assembler.setRegionName(dimension.getSpaceRegionName());
-			assembler.setSpaceName(dimension.getSpaceName());
-			assembler.setSeq(seq);
-			assembler.setSignature(lib.getSignature());
-			assembler.setTriggerName(triggerName);
-			service.saveTriggerAssembler(assembler);
-		}
-		return assembler;
 	}
 }
  

@@ -41,6 +41,8 @@ public class MagicTriggerAssembler {
 	private String codeName;
 	@Column(name = "SIGNATURE", length = 300)
 	private String signature;
+	@Column(name = "PARAMETER_NAMES", length = 500)
+	private String parameterNames;
 	
 	public String getId() {
 		return id;
@@ -101,5 +103,11 @@ public class MagicTriggerAssembler {
 	}
 	public void setSignature(String signature) {
 		this.signature = signature;
+	}
+	public String getParameterNames() {
+		return parameterNames;
+	}
+	public void setParameterNames(String parameterNames) {
+		this.parameterNames = parameterNames;
 	}
 }

@@ -148,9 +148,6 @@ private static final String SEQ = ServiceStaticInfo.TABLE_PREFIX+"RowItem";
 	@Transient
 	private MagicSpaceRegionViewItem viewItem;
 	
-	@Column(name = "BUSINESS_TRIGGERS",length = 1000)
-	private String businessTriggers;
-	
 	public String getDimensionId() {
 		return dimensionId;
 	}
@@ -386,12 +383,6 @@ private static final String SEQ = ServiceStaticInfo.TABLE_PREFIX+"RowItem";
 	}
 	public void setEditable(Boolean editable) {
 		this.editable = editable;
-	}
-	public String getBusinessTriggers() {
-		return businessTriggers;
-	}
-	public void setBusinessTriggers(String businessTriggers) {
-		this.businessTriggers = businessTriggers;
 	}
 	public String getSpaceRegionName() {
 		return spaceRegionName;

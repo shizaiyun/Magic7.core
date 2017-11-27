@@ -9,6 +9,7 @@ import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
+import org.magic7.core.domain.MagicTriggerAssembler;
 import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
@@ -85,4 +86,7 @@ public interface MagicService {
 	public MagicChoiceItem getChoiceItemById(String choiceItemId);
 	public List<MagicCodeLib> listCodeLib(String name,String description, Integer codeType,String orderBy,Integer start,Integer count);
 	public Boolean deleteCodeLnk(String codeId,String spaceName,String regionName);
+	public MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq);
+	public List<MagicTriggerAssembler> listMagicTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy);
+	public Boolean saveTriggerAssembler(MagicTriggerAssembler assembler);
 }

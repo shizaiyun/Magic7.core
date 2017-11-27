@@ -20,6 +20,7 @@ import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicSuperRowItem;
+import org.magic7.core.domain.MagicTriggerAssembler;
 import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
@@ -459,7 +460,6 @@ public class MagicSpaceHandler {
 		String triggers = null;
 		String triggerItems[] = null;
 		List<MagicSuperRowItem> items = row.getRowItems();
-		
 		for(int x=0;x<items.size();x++) {
 			MagicSuperRowItem item=items.get(x);
 			triggers = item.getBusinessTriggers();
@@ -555,7 +555,6 @@ public class MagicSpaceHandler {
 		}
 		return service.saveCodeLib(lib);
 	}
-	
 	public static List<MagicDimension> createSearchCriterias(String spaceName,String regionName,String queryView,Map<String,Object> conditionPairs) {
         ServiceUtil.notNull(spaceName, "spaceName is null");
         ServiceUtil.notNull(regionName, "regionName is null");
@@ -574,8 +573,7 @@ public class MagicSpaceHandler {
                }
         }
         return queryConditions;
-  }
-	
+	}
 	public static MagicObject createSupplementMagicObject(String objectId) {
 		ServiceUtil.notNull(objectId, "objectId is null");
 		MagicObject object = service.getMagicObjectById(objectId);
@@ -612,6 +610,27 @@ public class MagicSpaceHandler {
 			DaoAssistant.closeSessionByService();
 		}
 		return object;
+	}
+	public static MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,MagicCodeLib lib,MagicDimension dimension,Integer seq) {
+		ServiceUtil.notNull(triggerName, "triggerName is null");
+		ServiceUtil.notNull(lib, "lib is null");
+		ServiceUtil.notNull(dimension, "dimension is null");
+		ServiceUtil.notNull(seq, "seq is null");
+		MagicTriggerAssembler assembler = service.getMagicTriggerAssembler(triggerName, lib.getId(), dimension.getId(), seq);
+		if(assembler==null) {
+			assembler = new MagicTriggerAssembler();
+			assembler.setCodeLibId(lib.getId());
+			assembler.setCodeName(lib.getName());
+			assembler.setDimensionId(dimension.getId());
+			assembler.setDisplayName(dimension.getDisplayName());
+			assembler.setRegionName(dimension.getSpaceRegionName());
+			assembler.setSpaceName(dimension.getSpaceName());
+			assembler.setSeq(seq);
+			assembler.setSignature(lib.getSignature());
+			assembler.setTriggerName(triggerName);
+			service.saveTriggerAssembler(assembler);
+		}
+		return assembler;
 	}
 }
  

@@ -11,6 +11,7 @@ import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
+import org.magic7.core.domain.MagicTriggerAssembler;
 import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
@@ -636,7 +637,7 @@ public class MagicDao extends BaseDao {
 	}
 	@SuppressWarnings("unchecked")
 	public List<MagicCodeLib> listCodeLibWithLnk(String spaceName,String regionName, Integer codeType) {
-		StringBuilder hql = new StringBuilder("select lib from MagicCodeLib lib,MagicRegionCodeLnk lnk where lib.id=lnk.codeLidId"); 
+		StringBuilder hql = new StringBuilder("select distinct lib from MagicCodeLib lib,MagicRegionCodeLnk lnk where lib.id=lnk.codeLidId"); 
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(StringUtils.isNotEmpty(spaceName)) {
 			hql.append(" and lnk.spaceName=:spaceName");
@@ -769,12 +770,42 @@ public class MagicDao extends BaseDao {
 		}
 		return super.listWithSql(sql.toString(), params, "", MagicSpaceRegion.class.getCanonicalName(), start, count);
 	}
-	public Boolean deleteCodeLnk(String codeId,String spaceName,String regionName){
+	public Boolean deleteCodeLnk(String codeId,String spaceName,String regionName) {
 		String hql = "delete from MagicRegionCodeLnk r where r.codeLidId=:codeId and r.spaceName=:spaceName and r.regionName=:regionName";
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("codeId", codeId);
 		params.put("spaceName", spaceName);
 		params.put("regionName", regionName);
 		return super.delete(hql,params);
+	}
+	public MagicTriggerAssembler getMagicTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq) {
+		String hql = "from MagicTriggerAssembler where codeLidId=:codeLibId and triggerName=:triggerName and dimensionId=:dimensionId and seq=:seq";
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("codeLibId", codeLibId);
+		params.put("triggerName", triggerName);
+		params.put("dimensionId", dimensionId);
+		params.put("seq", seq);
+		return (MagicTriggerAssembler) super.getObject(hql, params);
+	}
+	@SuppressWarnings("unchecked")
+	public List<MagicTriggerAssembler> listMagicTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy) {
+		StringBuilder hql = new StringBuilder("from MagicTriggerAssembler where 1=1 ");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(StringUtils.isNotEmpty(triggerName)) {
+			hql.append(" and triggerName=:triggerName");
+			params.put("triggerName", triggerName);
+		}
+		if(StringUtils.isNotEmpty(spaceName)) {
+			hql.append(" and spaceName=:spaceName");
+			params.put("spaceName", spaceName);
+		}
+		if(StringUtils.isNotEmpty(spaceName)) {
+			hql.append(" and regionName=:regionName");
+			params.put("regionName", regionName);
+		}
+		if(StringUtils.isNotEmpty(orderBy)) {
+			hql.append(" order by "+orderBy);
+		}
+		return super.list(hql.toString(), params, 0, 10000);
 	}
 }

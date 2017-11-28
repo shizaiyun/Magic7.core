@@ -72,11 +72,8 @@ public class MagicSpaceRegionViewItem {
 	@Column(name = "VISIBLE")
 	private Boolean visible;
 	
-	@Column(name = "BUSINESS_CODE_ID",length = 64)
-	private String businessCodeId;
-	
-	@Column(name = "BUSINESS_TRIGGERS",length = 300)
-	private String businessTriggers;
+	@Column(name = "BUSINESS_TRIGGER",length = 300)
+	private String businessTrigger;
 	
 	@Column(name = "CHOICE_CODE",length = 64)
 	private String choiceCode;
@@ -189,17 +186,11 @@ public class MagicSpaceRegionViewItem {
 	public void setVisible(Boolean visible) {
 		this.visible = visible;
 	}
-	public String getBusinessCodeId() {
-		return businessCodeId;
+	public String getBusinessTrigger() {
+		return businessTrigger;
 	}
-	public void setBusinessCodeId(String businessCodeId) {
-		this.businessCodeId = businessCodeId;
-	}
-	public String getBusinessTriggers() {
-		return businessTriggers;
-	}
-	public void setBusinessTriggers(String businessTriggers) {
-		this.businessTriggers = businessTriggers;
+	public void setBusinessTrigger(String businessTrigger) {
+		this.businessTrigger = businessTrigger;
 	}
 	public String getChoiceCode() {
 		return choiceCode;

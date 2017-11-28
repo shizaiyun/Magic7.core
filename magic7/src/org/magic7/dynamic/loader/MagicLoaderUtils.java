@@ -63,7 +63,14 @@ public class MagicLoaderUtils {
 
 	public static void generateRegionClass(String spaceName, String regionName) {
 		String classPath = packagePrefix + spaceName + "." + regionName;
-		CtClass cls = pool.makeClass(classPath);
+		
+		CtClass cls = null;
+		try{
+			cls= pool.get(classPath);
+		} catch (Exception e) {
+		}
+		if(cls==null)
+			cls= pool.makeClass(classPath);
 		try {
 			cls.setSuperclass(pool.get("org.magic7.core.service.MagicRegionShell"));
 			List<MagicCodeLib> libs = service.listCodeLibWithLnk(spaceName, regionName,
@@ -83,6 +90,9 @@ public class MagicLoaderUtils {
 						pool.importPackage(packagE);
 				}
 				CtMethod method = CtNewMethod.make(codeLib.getCode(), cls);
+				try {
+					cls.removeMethod(method);
+				} catch (Exception e){}
 				cls.addMethod(method);
 			}
 			classtPool.put(classPath, cls.toClass());

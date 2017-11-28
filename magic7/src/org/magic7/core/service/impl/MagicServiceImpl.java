@@ -280,7 +280,7 @@ public class MagicServiceImpl implements MagicService {
 	public MagicSpaceRegionView getSpaceRegionView(String spaceName,String dimensionRegionName,
 			String viewName) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
-		ServiceUtil.notNull(dimensionRegionName, "spaceName is null");
+		//ServiceUtil.notNull(dimensionRegionName, "spaceName is null");
 		ServiceUtil.notNull(viewName, "viewName is null");
 		return magicDao.getSpaceRegionView(spaceName, dimensionRegionName, viewName);
 	}

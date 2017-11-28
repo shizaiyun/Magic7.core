@@ -555,8 +555,10 @@ public class MagicSpaceHandler {
         for (Entry<String, Object> entry : entrySet) {
                if(entry.getValue() != null && StringUtils.isNotBlank(entry.getValue().toString())) {
                       MagicDimension query = service.getDimension(spaceName, regionName, entry.getKey(), destination.getCode());
-                      query.setQueryCondition(entry.getValue());
-                      queryConditions.add(query);
+                      if(query!=null) {
+                    	  query.setQueryCondition(entry.getValue());
+                    	  queryConditions.add(query);
+                      }
                }
         }
         return queryConditions;

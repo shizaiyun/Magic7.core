@@ -89,4 +89,5 @@ public interface MagicService {
 	public MagicTriggerAssembler getTriggerAssembler(String triggerName,String codeLibId,String dimensionId,Integer seq);
 	public List<MagicTriggerAssembler> listTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy);
 	public Boolean saveTriggerAssembler(MagicTriggerAssembler assembler);
+	public MagicTriggerAssembler getAssemblerById(String id);
 }

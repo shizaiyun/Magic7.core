@@ -368,7 +368,7 @@ public class BaseDao {
 			DaoAssistant.closeSession();
 		}
 	}
-	protected boolean delete(Object obj) {
+	public boolean delete(Object obj) {
 		boolean result = false;
 		Transaction tx = null;
 		try {

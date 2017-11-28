@@ -90,4 +90,5 @@ public interface MagicService {
 	public List<MagicTriggerAssembler> listTriggerAssembler(String triggerName,String spaceName,String regionName,String orderBy);
 	public Boolean saveTriggerAssembler(MagicTriggerAssembler assembler);
 	public MagicTriggerAssembler getAssemblerById(String id);
+	public Boolean deleteAssembler(MagicTriggerAssembler assembler);
 }

@@ -44,6 +44,7 @@ public class MagicLoaderUtils {
 			pool.importPackage("org.magic7.utils.ServiceUtil");
 			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			pool.importPackage("java.math.BigDecimal");
+			pool.importPackage("java.util.Date");
 			
 			if (codeLib.getPackages() != null) {
 				String packages[] = codeLib.getPackages().split(";");
@@ -73,6 +74,7 @@ public class MagicLoaderUtils {
 			pool.importPackage("org.magic7.utils.ServiceUtil");
 			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			pool.importPackage("java.math.BigDecimal");
+			pool.importPackage("java.util.Date");
 			
 			for (MagicCodeLib codeLib : libs) {
 				if (codeLib.getPackages() != null) {

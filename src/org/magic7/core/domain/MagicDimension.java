@@ -133,7 +133,9 @@ public class MagicDimension {
 		VAGUE("Vague",1),
 		BIGGER("Bigger",2),
 		SMALLER("Smaller",3),
-		IN("In",4);
+		IN("In",4),
+		BIGGER_AND_EQ("BIGGER_AND_EQ",5),
+		SMALLER_AND_EQ("SMALLER_AND_EQ",5);
 		private String name;
 		private Integer code;
 		private QueryType(String name,Integer code) {

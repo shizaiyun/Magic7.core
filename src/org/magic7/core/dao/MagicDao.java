@@ -133,13 +133,29 @@ public class MagicDao extends BaseDao {
 							}
 						} else if(MagicDimension.QueryType.BIGGER.getCode().equals(criteria.getQueryType())) {
 							if(criteria.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode())) {
+								condition += " and NUM_VALUE<:"+"query_bigger_"+criteria.getDisplayName();
+								params.put("query_bigger_"+criteria.getDisplayName(), criteria.getQueryCondition());
+							} else if(criteria.getValueType().equals(MagicDimension.ValueType.DATE_VALUE.getCode())) {
+								condition += " and DATE_VALUE<:"+"query_bigger_"+criteria.getDisplayName();
+								params.put("query_bigger_"+criteria.getDisplayName(), criteria.getQueryCondition());
+							}
+						} else if(MagicDimension.QueryType.SMALLER.getCode().equals(criteria.getQueryType())) {
+							if(criteria.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode())) {
+								condition += " and NUM_VALUE>:"+"query_smaller"+criteria.getDisplayName();
+								params.put("query_smaller"+criteria.getDisplayName(), criteria.getQueryCondition());
+							} else if(criteria.getValueType().equals(MagicDimension.ValueType.DATE_VALUE.getCode())) {
+								condition += " and DATE_VALUE>:"+"query_smaller"+criteria.getDisplayName();
+								params.put("query_smaller"+criteria.getDisplayName(), criteria.getQueryCondition());
+							}
+						}  else if(MagicDimension.QueryType.BIGGER_AND_EQ.getCode().equals(criteria.getQueryType())) {
+							if(criteria.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode())) {
 								condition += " and NUM_VALUE<=:"+"query_bigger_"+criteria.getDisplayName();
 								params.put("query_bigger_"+criteria.getDisplayName(), criteria.getQueryCondition());
 							} else if(criteria.getValueType().equals(MagicDimension.ValueType.DATE_VALUE.getCode())) {
 								condition += " and DATE_VALUE<=:"+"query_bigger_"+criteria.getDisplayName();
 								params.put("query_bigger_"+criteria.getDisplayName(), criteria.getQueryCondition());
 							}
-						} else if(MagicDimension.QueryType.SMALLER.getCode().equals(criteria.getQueryType())) {
+						} else if(MagicDimension.QueryType.SMALLER_AND_EQ.getCode().equals(criteria.getQueryType())) {
 							if(criteria.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode())) {
 								condition += " and NUM_VALUE>=:"+"query_smaller"+criteria.getDisplayName();
 								params.put("query_smaller"+criteria.getDisplayName(), criteria.getQueryCondition());

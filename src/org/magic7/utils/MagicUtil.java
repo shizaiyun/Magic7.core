@@ -3,6 +3,7 @@ package org.magic7.utils;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
@@ -184,26 +185,29 @@ public class MagicUtil {
 		dimension.setChoiceName(choiceName);
 		dimension.setChoiceCode(choiceCode);
 	}
-	public static MagicTriggerAssembler bindTrigger(String triggerName,MagicCodeLib lib,MagicDimension dimension,Integer seq) {
+	public static MagicTriggerAssembler bindTrigger(String assemblerId,String triggerName,MagicCodeLib lib,MagicDimension dimension, Integer seq) {
 		ServiceUtil.notNull(triggerName, "triggerName is null");
 		ServiceUtil.notNull(lib, "lib is null");
 		ServiceUtil.notNull(dimension, "dimension is null");
 		ServiceUtil.notNull(seq, "seq is null");
-		MagicTriggerAssembler assembler = service.getTriggerAssembler(triggerName, lib.getId(), dimension.getId(), seq);
-		if(assembler==null) {
+		MagicTriggerAssembler assembler = null;
+		if(StringUtils.isNotEmpty(assemblerId))
+			assembler = service.getAssemblerById(assemblerId);
+		else
+			assembler = service.getTriggerAssembler(triggerName, lib.getId(), dimension.getId(), seq);
+		if(assembler==null) 
 			assembler = new MagicTriggerAssembler();
-			assembler.setCodeLibId(lib.getId());
-			assembler.setCodeName(lib.getName());
-			assembler.setDimensionId(dimension.getId());
-			assembler.setDisplayName(dimension.getDisplayName());
-			assembler.setRegionName(dimension.getSpaceRegionName());
-			assembler.setSpaceName(dimension.getSpaceName());
-			assembler.setSeq(seq);
-			assembler.setSignature(lib.getSignature());
-			assembler.setTriggerName(triggerName);
-			assembler.setParameterNames(lib.getParameterNames());
-			service.saveTriggerAssembler(assembler);
-		}
+		assembler.setCodeLibId(lib.getId());
+		assembler.setCodeName(lib.getName());
+		assembler.setDimensionId(dimension.getId());
+		assembler.setDisplayName(dimension.getDisplayName());
+		assembler.setRegionName(dimension.getSpaceRegionName());
+		assembler.setSpaceName(dimension.getSpaceName());
+		assembler.setSeq(seq);
+		assembler.setSignature(lib.getSignature());
+		assembler.setTriggerName(triggerName);
+		assembler.setParameterNames(lib.getParameterNames());
+		service.saveTriggerAssembler(assembler);
 		return assembler;
 	}
 }

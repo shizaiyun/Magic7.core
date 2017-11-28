@@ -413,4 +413,8 @@ public class MagicServiceImpl implements MagicService {
 		ServiceUtil.notNull(assembler.getCodeName(), "assembler.codeName is null");
 		return magicDao.save(assembler);
 	}
+	public MagicTriggerAssembler getAssemblerById(String id) {
+		ServiceUtil.notNull(id, "id is null");
+		return (MagicTriggerAssembler) magicDao.getObject(MagicTriggerAssembler.class, id);
+	}
 }

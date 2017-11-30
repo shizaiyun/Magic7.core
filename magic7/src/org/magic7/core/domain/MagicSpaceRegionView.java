@@ -74,6 +74,9 @@ public class MagicSpaceRegionView {
 	@Column(name = "NAME", length = 500)
 	private String name;
 	
+	@Column(name = "DISPLAY_NAME", length = 500)
+	private String displayName;
+	
 	@Column(name = "LAYOUT", length = 100)
 	private String layout;
 	
@@ -124,6 +127,12 @@ public class MagicSpaceRegionView {
 	}
 	public Integer getDestination() {
 		return destination;
+	}
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	public String getDestinationName() {
 		Destination d = MagicDimension.Destination.getDestination(destination);

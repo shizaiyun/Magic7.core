@@ -27,9 +27,43 @@ public class MagicSpaceRegionView {
 			this.name = name;
 			this.code = code;
 		}
-		public static Layout getQueryType(Integer code) {
+		public static Layout getLayout(Integer code) {
 			Layout[] types = values();
 			for(Layout type:types) {
+				if(type.code.intValue()==code.intValue())
+					return type;
+			}
+			return null;
+		}
+		public String toString() {
+			return "name:"+this.name+";"+"code:"+this.code;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public Integer getCode() {
+			return code;
+		}
+		public void setCode(Integer code) {
+			this.code = code;
+		}
+	}
+	
+	public enum ViewType {
+		NORMAL("Normal",0),
+		QUESTIONNAIRE("Questionnaire",1);
+		private String name;
+		private Integer code;
+		private ViewType(String name,Integer code) {
+			this.name = name;
+			this.code = code;
+		}
+		public static ViewType getViewType(Integer code) {
+			ViewType[] types = values();
+			for(ViewType type:types) {
 				if(type.code.intValue()==code.intValue())
 					return type;
 			}
@@ -82,6 +116,9 @@ public class MagicSpaceRegionView {
 	
 	@Column(name = "DESTINATION")
 	private Integer destination = 0;
+	
+	@Column(name = "VIEW_TYPE")
+	private Integer viewType;
 	
 	public String getId() {
 		return id;
@@ -142,5 +179,17 @@ public class MagicSpaceRegionView {
 	}
 	public void setDestination(Integer destination) {
 		this.destination = destination;
+	}
+	public Integer getViewType() {
+		return viewType;
+	}
+	public void setViewType(Integer viewType) {
+		this.viewType = viewType;
+	}
+	public String getViewTypeName() {
+		ViewType d = ViewType.getViewType(viewType);
+		if(d==null)
+			return null;
+		return d.getName();
 	}
 }

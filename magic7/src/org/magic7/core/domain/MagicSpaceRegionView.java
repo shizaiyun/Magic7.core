@@ -53,8 +53,8 @@ public class MagicSpaceRegionView {
 	}
 	
 	public enum ViewType {
-		NORMAL("Normal",0),
-		QUESTIONNAIRE("Questionnaire",1);
+		DEFAULT("DEFAULT",0),
+		CUSTOMER_DEFINE("CUSTOMER_DEFINE",1);
 		private String name;
 		private Integer code;
 		private ViewType(String name,Integer code) {
@@ -115,10 +115,13 @@ public class MagicSpaceRegionView {
 	private String layout;
 	
 	@Column(name = "DESTINATION")
-	private Integer destination = 0;
+	private Integer destination = MagicDimension.Destination.FOR_DATA.getCode();
 	
 	@Column(name = "VIEW_TYPE")
-	private Integer viewType;
+	private Integer viewType = ViewType.DEFAULT.code;
+	
+	@Column(name = "CUTOMER_PAGE_NAME",length=300)
+	private String cutomerPageName;
 	
 	public String getId() {
 		return id;
@@ -191,5 +194,11 @@ public class MagicSpaceRegionView {
 		if(d==null)
 			return null;
 		return d.getName();
+	}
+	public String getCutomerPageName() {
+		return cutomerPageName;
+	}
+	public void setCutomerPageName(String cutomerPageName) {
+		this.cutomerPageName = cutomerPageName;
 	}
 }

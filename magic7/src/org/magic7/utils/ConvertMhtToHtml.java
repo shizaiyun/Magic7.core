@@ -34,9 +34,6 @@ public class ConvertMhtToHtml {
 	private static final Pattern base64ContentPattern = Pattern.compile("(\\?)[^\\?]{1,}(\u0001)");//用于处理Base64字符串
 	private static final Pattern linkPattern = Pattern.compile("(\\<link){1,1}[^\\>]{1,}[\\>]{1,1}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern hrefPattern = Pattern.compile("(href=(\\\"|\'))[^\\\"\']*(\\\"|\')", Pattern.CASE_INSENSITIVE);
-	public static void main(String[] args) {
-		ConvertMhtToHtml.mht2html("", "","test.html");
-	}
 
 	/**
 	 * 将 mht文件转换成 html文件
@@ -44,7 +41,7 @@ public class ConvertMhtToHtml {
 	 * @param s_SrcMht
 	 * @param s_DescHtml
 	 */
-	public static String mht2html(String s_SrcMht, String s_DescHtml,String fileName) {
+	public static String mht2html(String s_SrcMht, String s_DescHtml,String fileName,String address) {
 		try {
 			System.out.println("s_SrcMht:"+s_SrcMht);
 			System.out.println("s_DescHtml:"+s_DescHtml);
@@ -79,7 +76,7 @@ public class ConvertMhtToHtml {
 				for(Integer textIndex:textPart) {
 					MimeBodyPart bp1 = (MimeBodyPart) mp.getBodyPart(textIndex);
 					strEncodng = getEncoding(bp1);
-					String body = getHtmlText(bp1,"\\"+File.separator+"uploadFile"+"\\"+File.separator+fileName+".files", strEncodng);
+					String body = getHtmlText(bp1,address+"\\"+File.separator+"uploadFile"+"\\"+File.separator+fileName+".files", strEncodng);
 					buffer.append(body);
 				}
 

@@ -202,7 +202,6 @@ public class MagicDao extends BaseDao {
 							hql.append(objectQuery);
 							params.put("objectId", objectId);
 						}
-						System.out.println("222222222222222222222222222222222:"+displayName);
 						if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
 							hql.append(dimensionQuery);
 							params.put("dimensionDisplayName", displayName);
@@ -480,7 +479,6 @@ public class MagicDao extends BaseDao {
 			params.put("spaceName", spaceName);
 			params.put("spaceRegionName", regionName);
 		}
-		System.out.println(hql);
 		return super.listWithSql(hql.toString(), params, "", MagicRegionRow.class.getCanonicalName(), start, count);
 	}
 	public Integer listRowCount(String partition,String spaceName,String regionName,String displayName, String objectId, Boolean valid, List<MagicDimension> searchCriterias) {
@@ -500,7 +498,6 @@ public class MagicDao extends BaseDao {
 			params.put("spaceRegionName", regionName);
 		}
 		hql.append(" ) y"); 
-		System.out.println(hql);
 		return super.listCountWithSQL(hql.toString(), params);
 	}
 	public MagicDimension getDimensionById(String id) {

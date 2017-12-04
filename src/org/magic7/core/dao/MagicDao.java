@@ -93,9 +93,10 @@ public class MagicDao extends BaseDao {
 		return super.listWithSql(hql.toString(), params,"",MagicDimension.class.getCanonicalName(), 0, 1000);
 	}
 	private void bulidQueryConditionsSQL(StringBuilder hql,String partition,String objectId,
-			List<MagicDimension> dimensions,List<MagicDimension> searchCriterias, Map<String,Object> params) {
+			String displayName,List<MagicDimension> dimensions, List<MagicDimension> searchCriterias, Map<String,Object> params) {
+		int count = 0;
 		for(MagicDimension dimension:dimensions) {
-			if(dimension.getVirtual()) {
+			if(!dimension.getLnk()) {
 				String condition = null;
 				if(searchCriterias!=null) {
 					for(MagicDimension criteria:searchCriterias) {
@@ -193,12 +194,21 @@ public class MagicDao extends BaseDao {
 								}
 							}
 						}
-						hql.append(" inner join (select * from "+partition+"_ROW_ITEM where SPACE_REGION_NAME=:spaceRegionName ");
-						if(StringUtils.isNotEmpty(objectId))
+						if(count>0)
+							hql.append(" union ");
+						count++;
+						hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
+						if(StringUtils.isNotEmpty(objectId)) {
 							hql.append(objectQuery);
-						hql.append(condition+" ) "+criteria.getDisplayName()+" on a.ROW_ID="+criteria.getDisplayName()+".ROW_ID ");
+							params.put("objectId", objectId);
+						}
+						System.out.println("222222222222222222222222222222222:"+displayName);
+						if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
+							hql.append(dimensionQuery);
+							params.put("dimensionDisplayName", displayName);
+							return ;
+						}
 					}
-					
 				}
 			} else {
 				String tableName = null;
@@ -255,13 +265,22 @@ public class MagicDao extends BaseDao {
 		}
 	}
 	public void buildListRowItemValueMap(StringBuilder hql,String partition,String objectId,List<MagicDimension> dimensions,
-			List<MagicDimension> searchCriterias,String spaceRegionName, Map<String,Object> params) {
-		params.put("spaceRegionName", spaceRegionName);
-		if(StringUtils.isNotEmpty(objectId))
-			params.put("objectId", objectId);
-		if(searchCriterias==null||searchCriterias.size()==0)
+			List<MagicDimension> searchCriterias,String displayName, Map<String,Object> params, Boolean valid) {
+		if((searchCriterias==null||searchCriterias.size()==0)&&StringUtils.isEmpty(displayName)) {
+			hql.append(" where row.valid=:valid");
+			params.put("valid", valid);
+			hql.append(dimensionQuery);
+			params.put("dimensionDisplayName", displayName);
 			return ;
-		bulidQueryConditionsSQL(hql, partition, objectId, dimensions, searchCriterias, params);
+		}
+		hql.append(" , (select count(display_name),row_id from ( ");
+		bulidQueryConditionsSQL(hql, partition, objectId, displayName, dimensions, searchCriterias, params);
+		hql.append(") a group by row_id having count(display_name)="+searchCriterias.size());
+		hql.append(") x where x.ROW_ID=row.ID ");
+		if(valid!=null) {
+			hql.append(" and row.valid=:valid");
+			params.put("valid", valid);
+		}
 	}
 	public MagicRegionRow getRowById(String id) {
 		return (MagicRegionRow) super.getObject(MagicRegionRow.class, id);
@@ -452,51 +471,36 @@ public class MagicDao extends BaseDao {
 		List<MagicDimension> dimensions = this.listDimension(null,spaceName, spaceRegion.getId(), null, null, 
 				MagicDimension.Destination.FOR_DATA.getCode(), " seq ");
 		Map<String,Object> params = new HashMap<String,Object>();
-		String header = "select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ,(select a.ROW_ID from (select ROW_ID from "
-				+partition+"_ROW_ITEM where SPACE_REGION_NAME=:spaceRegionName ";
-		if(StringUtils.isNotEmpty(objectId))
-			header+=objectQuery;
-		if(StringUtils.isNotEmpty(displayName)) {
-			header+=dimensionQuery;
-			params.put("dimensionDisplayName", displayName);
-		}
-		header+= "group by ROW_ID) as a  ";
-		StringBuilder hql = new StringBuilder(header);
-		buildListRowItemValueMap(hql,partition,objectId,dimensions,searchCriterias,spaceRegion.getName(), params);
-		hql.append(") x where x.ROW_ID=row.ID ");
-		if(valid!=null) {
-			hql.append(" and row.valid=:valid");
-			params.put("valid", valid);
-		}
+		StringBuilder hql = new StringBuilder("select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ");
+		buildListRowItemValueMap(hql,partition,objectId,dimensions,searchCriterias,displayName, params, valid);
+		
 		if(orderBy!=null && !"".equals(orderBy))
 			hql.append(" order by row."+orderBy);
+		if(searchCriterias!=null&&searchCriterias.size()>0) {
+			params.put("spaceName", spaceName);
+			params.put("spaceRegionName", regionName);
+		}
+		System.out.println(hql);
 		return super.listWithSql(hql.toString(), params, "", MagicRegionRow.class.getCanonicalName(), start, count);
 	}
-	public Integer listRowCount(String partition,String spaceName,String regionName,String displayName, String objectId, Boolean valid, List<MagicDimension> queryConditions) {
+	public Integer listRowCount(String partition,String spaceName,String regionName,String displayName, String objectId, Boolean valid, List<MagicDimension> searchCriterias) {
+		if(StringUtils.isEmpty(partition))
+			partition = ServiceStaticInfo.TABLE_PREFIX;
 		MagicSpaceRegion spaceRegion = getSpaceRegion(spaceName, regionName);
 		if(spaceRegion==null)
 			throw new RuntimeException("spaceRegion is null");
-		if(StringUtils.isEmpty(partition))
-			partition = ServiceStaticInfo.TABLE_PREFIX;
-		List<MagicDimension> dimensions = this.listDimension(null,spaceName, spaceRegion.getId(), null, null, null, " seq ");
+		List<MagicDimension> dimensions = this.listDimension(null,spaceName, spaceRegion.getId(), null, null, 
+				MagicDimension.Destination.FOR_DATA.getCode(), " seq ");
 		Map<String,Object> params = new HashMap<String,Object>();
-		String header = "select count(*) from (select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ,(select a.ROW_ID from (select ROW_ID from "
-				+partition+"_ROW_ITEM where SPACE_REGION_NAME=:spaceRegionName ";
-		if(StringUtils.isNotEmpty(objectId))
-			header+=objectQuery;
-		if(StringUtils.isNotEmpty(displayName)) {
-			header+=dimensionQuery;
-			params.put("dimensionDisplayName", displayName);
+		StringBuilder hql = new StringBuilder("select count(*) from (select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ");
+		buildListRowItemValueMap(hql,partition,objectId,dimensions,searchCriterias,displayName, params, valid);
+		
+		if(searchCriterias!=null&&searchCriterias.size()>0) {
+			params.put("spaceName", spaceName);
+			params.put("spaceRegionName", regionName);
 		}
-		header+= "group by ROW_ID) as a  ";
-		StringBuilder hql = new StringBuilder(header);
-		buildListRowItemValueMap(hql,partition,objectId,dimensions,queryConditions,spaceRegion.getName(), params);
-		hql.append(") x where x.ROW_ID=row.ID ");
-		if(valid!=null) {
-			hql.append(" and row.valid=:valid");
-			params.put("valid", valid);
-		}
-		hql.append(" ) y");
+		hql.append(" ) y"); 
+		System.out.println(hql);
 		return super.listCountWithSQL(hql.toString(), params);
 	}
 	public MagicDimension getDimensionById(String id) {

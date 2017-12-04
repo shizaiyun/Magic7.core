@@ -397,11 +397,16 @@ public class MagicDao extends BaseDao {
 	}
 	public void buildListRowItemValueMap(StringBuilder hql,String partition,String objectId,List<MagicDimension> dimensions,
 			List<MagicDimension> searchCriterias,String displayName, Map<String,Object> params, Boolean valid) {
-		if((searchCriterias==null||searchCriterias.size()==0)&&StringUtils.isEmpty(displayName)) {
+		if(searchCriterias==null||searchCriterias.size()==0) {
+			if(StringUtils.isNotEmpty(displayName)) {
+				hql.append(", "+partition+"_ROW_ITEM item ");
+			}
 			hql.append(" where row.valid=:valid");
 			params.put("valid", valid);
-			hql.append(dimensionQuery);
-			params.put("dimensionDisplayName", displayName);
+			if(StringUtils.isNotEmpty(displayName)) {
+				hql.append(dimensionQuery);
+				params.put("dimensionDisplayName", displayName);
+			}
 			return ;
 		}
 		hql.append(" , (select count(display_name),row_id from ( ");

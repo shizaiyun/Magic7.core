@@ -121,7 +121,6 @@ public class DaoAssistant {
 				s.close();
 			session.set(null);
 			isAuto.set(null);
-			System.out.println("----------------------------------------------------closeSession"); 
 		}
 	}
 	public static void closeSessionByService() {
@@ -130,7 +129,6 @@ public class DaoAssistant {
 			s.close();
 		session.set(null);
 		isAuto.set(null);
-		System.out.println("----------------------------------------------------closeSessionByService"); 
 	}
 
 	/**

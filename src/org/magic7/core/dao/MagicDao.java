@@ -25,8 +25,8 @@ import org.magic7.dynamic.loader.MagicLoaderUtils;
 public class MagicDao extends BaseDao {
 	private MagicDao(){}
 	private static MagicDao instance = new MagicDao();
-	private static String objectQuery = " and OBJECT_ID=:objectId ";
-	private static String dimensionQuery = " and DISPLAY_NAME=:dimensionDisplayName " +
+	private static String objectQuery = " and item.OBJECT_ID=:objectId ";
+	private static String dimensionQuery = " and item.DISPLAY_NAME=:dimensionDisplayName " +
 			" and (STR_VALUE is not null or DATE_VALUE is not null or LIST_STR_VALUE is not null or NUM_VALUE is not null " +
 			" or BOOLEAN_VALUE is not null )";
 	public static MagicDao getInstance() {
@@ -181,9 +181,9 @@ public class MagicDao extends BaseDao {
 									condition = condition.replaceAll("(or[\\s]*)$", " ))");
 									condition+=" or ("+criteria.getAdditionalQuery()+"))";
 									if(criteria.getAdditionalQueryCondition()==null) {
-										params.put("default_query_"+criteria.getDisplayName(), criteria.getQueryCondition());
+										params.put("additional_query_"+criteria.getDisplayName(), criteria.getQueryCondition());
 									} else {
-										params.put("default_query_"+criteria.getDisplayName(), criteria.getAdditionalQueryCondition());
+										params.put("additional_query_"+criteria.getDisplayName(), criteria.getAdditionalQueryCondition());
 									}
 								} else {
 									condition += " and (";
@@ -197,7 +197,7 @@ public class MagicDao extends BaseDao {
 						if(count>0)
 							hql.append(" union ");
 						count++;
-						hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
+						hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM item where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
 						if(StringUtils.isNotEmpty(objectId)) {
 							hql.append(objectQuery);
 							params.put("objectId", objectId);
@@ -205,7 +205,6 @@ public class MagicDao extends BaseDao {
 						if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
 							hql.append(dimensionQuery);
 							params.put("dimensionDisplayName", displayName);
-							return ;
 						}
 					}
 				}
@@ -215,49 +214,57 @@ public class MagicDao extends BaseDao {
 				String queryDimension = null;
 				String condition = "";
 				if(searchCriterias!=null) {
-					for(MagicDimension query:searchCriterias) {
-						if(!query.getDisplayName().equals(dimension.getDisplayName())||query.getQueryCondition()==null)
+					for(MagicDimension criteria:searchCriterias) {
+						if(!criteria.getDisplayName().equals(dimension.getDisplayName())||criteria.getQueryCondition()==null)
 							continue;
 						tableName = DaoAssistant.getTableName(dimension.getRelationEntityName());
 						lnkDimension = DaoAssistant.getPropertyName(dimension.getRelationEntityName(), "id");
-						queryDimension = DaoAssistant.getPropertyName(query.getRelationEntityName(), query.getName());
-						if(MagicDimension.QueryType.PRECISE.getCode().equals(query.getQueryType())) {
-							if(StringUtils.isNotEmpty(query.getAdditionalQuery())) {
-								condition += " and (target."+queryDimension+"=:"+"query_"+query.getDisplayName()+" or "+query.getAdditionalQuery()+")";
-								params.put("default_query_"+query.getDisplayName(), query.getLikeModifier()+query.getDelimiter()+
-										query.getQueryCondition()+query.getDelimiter()+query.getLikeModifier());
+						queryDimension = DaoAssistant.getPropertyName(criteria.getRelationEntityName(), criteria.getName());
+						if(MagicDimension.QueryType.PRECISE.getCode().equals(criteria.getQueryType())) {
+							if(StringUtils.isNotEmpty(criteria.getAdditionalQuery())) {
+								condition += " and (target."+queryDimension+"=:"+"query_"+criteria.getDisplayName()+" or "+criteria.getAdditionalQuery()+")";
+								params.put("default_query_"+criteria.getDisplayName(), criteria.getLikeModifier()+criteria.getDelimiter()+
+										criteria.getQueryCondition()+criteria.getDelimiter()+criteria.getLikeModifier());
 							} else
-								condition = " and target."+queryDimension+"=:"+"query_"+query.getDisplayName();
-							params.put("query_"+query.getDisplayName(), query.getQueryCondition());
-						} else if(MagicDimension.QueryType.VAGUE.getCode().equals(query.getQueryType())) {
-							condition = " and target."+queryDimension+" like :"+"query_"+query.getDisplayName();
-							params.put("query_"+query.getDisplayName(), "%"+query.getQueryCondition()+"%");
-						} else if(MagicDimension.QueryType.BIGGER.getCode().equals(query.getQueryType())) {
-							condition = " and target."+queryDimension+"<=:"+"query_"+query.getDisplayName();
-							params.put("query_"+query.getDisplayName(), query.getQueryCondition());
-						} else if(MagicDimension.QueryType.SMALLER.getCode().equals(query.getQueryType())) {
-							condition = " and target."+queryDimension+">=:"+"query_"+query.getDisplayName();
-							params.put("query_"+query.getDisplayName(), query.getQueryCondition());
-						} else if(MagicDimension.QueryType.IN.getCode().equals(query.getQueryType())) {
-							if(query.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode()))
-								condition = " and target."+queryDimension+" in ("+query.getQueryCondition().
+								condition = " and target."+queryDimension+"=:"+"query_"+criteria.getDisplayName();
+							params.put("query_"+criteria.getDisplayName(), criteria.getQueryCondition());
+						} else if(MagicDimension.QueryType.VAGUE.getCode().equals(criteria.getQueryType())) {
+							condition = " and target."+queryDimension+" like :"+"query_"+criteria.getDisplayName();
+							params.put("query_"+criteria.getDisplayName(), "%"+criteria.getQueryCondition()+"%");
+						} else if(MagicDimension.QueryType.BIGGER.getCode().equals(criteria.getQueryType())) {
+							condition = " and target."+queryDimension+"<=:"+"query_"+criteria.getDisplayName();
+							params.put("query_"+criteria.getDisplayName(), criteria.getQueryCondition());
+						} else if(MagicDimension.QueryType.SMALLER.getCode().equals(criteria.getQueryType())) {
+							condition = " and target."+queryDimension+">=:"+"query_"+criteria.getDisplayName();
+							params.put("query_"+criteria.getDisplayName(), criteria.getQueryCondition());
+						} else if(MagicDimension.QueryType.IN.getCode().equals(criteria.getQueryType())) {
+							if(criteria.getValueType().equals(MagicDimension.ValueType.NUM_VALUE.getCode()))
+								condition = " and target."+queryDimension+" in ("+criteria.getQueryCondition().
 									toString().replaceAll("^[,]{1,}|[,]{1,}$", "")+" )";
-							else if(query.getValueType().equals(MagicDimension.ValueType.LIST_STR_VALUE.getCode()))
-								condition = " and target."+queryDimension+" in ('"+query.getQueryCondition().
+							else if(criteria.getValueType().equals(MagicDimension.ValueType.LIST_STR_VALUE.getCode()))
+								condition = " and target."+queryDimension+" in ('"+criteria.getQueryCondition().
 									toString().replaceAll("^[,]{1,}|[,]{1,}$", "").replaceAll(",", "','")+"' )";
-						} 
+						}
+						if(count>0)
+							hql.append(" union ");
+						count++;
 						if(!MagicDimension.ValueType.LIST_STR_VALUE.getCode().equals(dimension.getValueType())) {
-							hql.append(" inner join (select distinct item.* from "+partition+"_ROW_ITEM item, " +tableName+" as target "+
-									" where item.SPACE_REGION_NAME=:spaceRegionName and item.ENTITY_ID=target."+lnkDimension+
+							hql.append(" select '"+criteria.getDisplayName()+"' as display_name,item.row_id from "+partition+"_ROW_ITEM item, " +tableName+" as target "+
+									" where item.SPACE_NAME=:spaceName and item.SPACE_REGION_NAME=:spaceRegionName and item.ENTITY_ID=target."+lnkDimension+
 									condition);
 						} else {
-							hql.append(" inner join (select distinct item.* from "+partition+"_ROW_ITEM item, " +tableName+" as target "+
-									" where item.SPACE_REGION_NAME=:spaceRegionName and FIND_IN_SET(target."+lnkDimension+",item.ENTITY_ID)"+
+							hql.append(" select '"+criteria.getDisplayName()+"' as display_name,item.row_id from "+partition+"_ROW_ITEM item, " +tableName+" as target "+
+									" where item.SPACE_NAME=:spaceName and item.SPACE_REGION_NAME=:spaceRegionName and FIND_IN_SET(target."+lnkDimension+",item.ENTITY_ID)"+
 									condition);
 						}
-						if(StringUtils.isNotEmpty(objectId))
-							hql.append(" and item.OBJECT_ID=:objectId ");
-						hql.append(" ) "+query.getDisplayName()+" on a.ROW_ID="+query.getDisplayName()+".ROW_ID ");
+						if(StringUtils.isNotEmpty(objectId)) {
+							hql.append(objectQuery);
+							params.put("objectId", objectId);
+						}
+						if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
+							hql.append(dimensionQuery);
+							params.put("dimensionDisplayName", displayName);
+						}
 					}
 				}
 			}

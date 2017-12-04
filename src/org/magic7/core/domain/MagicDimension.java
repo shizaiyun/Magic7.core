@@ -296,8 +296,8 @@ public class MagicDimension {
 	@Column(name = "VALUE_NAME",length = 500)
 	private String valueName;
 	
-	@Column(name = "DEFAULT_QUERY",length = 500)
-	private String defaultQuery;
+	@Column(name = "ADDITIONAL_QUERY",length = 500)
+	private String additionalQuery;
 	
 	@Column(name = "VISIBLE")
 	private Boolean visible;
@@ -309,7 +309,7 @@ public class MagicDimension {
 	private Boolean editable;
 	
 	@Transient
-	private Object defaultQueryCondition;
+	private Object additionalQueryCondition;
 	
 	@Column(name = "DELIMITER",length = 10)//defaultQuery如果是查部门及其子部门时会有用
 	private String delimiter;
@@ -505,11 +505,11 @@ public class MagicDimension {
 	public void setDualPropertyName(String dualPropertyName) {
 		this.dualPropertyName = dualPropertyName;
 	}
-	public String getDefaultQuery() {
-		return defaultQuery;
+	public String getAdditionalQuery() {
+		return additionalQuery;
 	}
-	public void setDefaultQuery(String defaultQuery) {
-		this.defaultQuery = defaultQuery;
+	public void setAdditionalQuery(String additionalQuery) {
+		this.additionalQuery = additionalQuery;
 	}
 	public String getDelimiter() {
 		if(delimiter==null)
@@ -525,11 +525,11 @@ public class MagicDimension {
 	public void setPageShowName(String pageShowName) {
 		this.pageShowName = pageShowName;
 	}
-	public Object getDefaultQueryCondition() {
-		return defaultQueryCondition;
+	public Object getAdditionalQueryCondition() {
+		return additionalQueryCondition;
 	}
-	public void setDefaultQueryCondition(Object defaultQueryCondition) {
-		this.defaultQueryCondition = defaultQueryCondition;
+	public void setAdditionalQueryCondition(Object defaultQueryCondition) {
+		this.additionalQueryCondition = defaultQueryCondition;
 	}
 	public String getLikeModifier() {
 		if(likeModifier==null)

@@ -107,11 +107,11 @@ public class MagicDao extends BaseDao {
 						params.put(dimension.getName(), dimension.getName());
 						if(MagicDimension.QueryType.PRECISE.getCode().equals(criteria.getQueryType())) {
 							if(criteria.getValueType().equals(MagicDimension.ValueType.STR_VALUE.getCode())) {
-								if(StringUtils.isNotEmpty(criteria.getDefaultQuery())) {
-									condition = " and ((STR_VALUE=:"+"query_"+criteria.getDisplayName()+" and NAME=:"+dimension.getName()+") or ("+criteria.getDefaultQuery()+"))";
-									if(criteria.getDefaultQueryCondition()!=null) {
+								if(StringUtils.isNotEmpty(criteria.getAdditionalQuery())) {
+									condition = " and ((STR_VALUE=:"+"query_"+criteria.getDisplayName()+" and NAME=:"+dimension.getName()+") or ("+criteria.getAdditionalQuery()+"))";
+									if(criteria.getAdditionalQueryCondition()!=null) {
 										params.put("default_query_"+criteria.getDisplayName(), criteria.getLikeModifier()+criteria.getDelimiter()+
-												criteria.getDefaultQueryCondition()+criteria.getDelimiter()+criteria.getLikeModifier());
+												criteria.getAdditionalQueryCondition()+criteria.getDelimiter()+criteria.getLikeModifier());
 									}
 								} else
 									condition += " and STR_VALUE=:"+"query_"+criteria.getDisplayName();
@@ -172,17 +172,17 @@ public class MagicDao extends BaseDao {
 										toString().replaceAll("^[,]{1,}|[,]{1,}$", "").replaceAll(",", "','")+"' )";
 							} else if(criteria.getValueType().equals(MagicDimension.ValueType.LIST_STR_VALUE.getCode())){
 								String ids[] = criteria.getQueryCondition().toString().replaceAll("^[,]{1,}|[,]{1,}$", "").split(",");
-								if(StringUtils.isNotEmpty(criteria.getDefaultQuery())) {
+								if(StringUtils.isNotEmpty(criteria.getAdditionalQuery())) {
 									condition = " and (( NAME=:"+dimension.getName()+" and (";
 									for(String id:ids) {
 										condition+= " LIST_STR_VALUE like '%,"+id+",%' or";
 									}
 									condition = condition.replaceAll("(or[\\s]*)$", " ))");
-									condition+=" or ("+criteria.getDefaultQuery()+"))";
-									if(criteria.getDefaultQueryCondition()==null) {
+									condition+=" or ("+criteria.getAdditionalQuery()+"))";
+									if(criteria.getAdditionalQueryCondition()==null) {
 										params.put("default_query_"+criteria.getDisplayName(), criteria.getQueryCondition());
 									} else {
-										params.put("default_query_"+criteria.getDisplayName(), criteria.getDefaultQueryCondition());
+										params.put("default_query_"+criteria.getDisplayName(), criteria.getAdditionalQueryCondition());
 									}
 								} else {
 									condition += " and (";
@@ -213,8 +213,8 @@ public class MagicDao extends BaseDao {
 						lnkDimension = DaoAssistant.getPropertyName(dimension.getRelationEntityName(), "id");
 						queryDimension = DaoAssistant.getPropertyName(query.getRelationEntityName(), query.getName());
 						if(MagicDimension.QueryType.PRECISE.getCode().equals(query.getQueryType())) {
-							if(StringUtils.isNotEmpty(query.getDefaultQuery())) {
-								condition += " and (target."+queryDimension+"=:"+"query_"+query.getDisplayName()+" or "+query.getDefaultQuery()+")";
+							if(StringUtils.isNotEmpty(query.getAdditionalQuery())) {
+								condition += " and (target."+queryDimension+"=:"+"query_"+query.getDisplayName()+" or "+query.getAdditionalQuery()+")";
 								params.put("default_query_"+query.getDisplayName(), query.getLikeModifier()+query.getDelimiter()+
 										query.getQueryCondition()+query.getDelimiter()+query.getLikeModifier());
 							} else

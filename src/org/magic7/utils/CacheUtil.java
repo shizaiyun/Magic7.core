@@ -1,7 +1,5 @@
 package org.magic7.utils;
 
-import java.io.OutputStream;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -29,10 +27,10 @@ public class CacheUtil {
 	    imageCache.put(element);
         imageCache.flush();
     }  
-    public static Object getImage(String key){  
+    public static byte[] getImage(String key){  
         Element element =imageCache.get(key);  
         if(element!=null){  
-            return element.getObjectValue();  
+            return (byte[])element.getObjectValue();  
         }  
         return null;  
     } 
@@ -40,15 +38,15 @@ public class CacheUtil {
         imageCache.remove(key) ;
     }
     
-    public static void putFile(String key,OutputStream value){  
+    public static void putFile(String key,byte[] value){  
         Element element = new Element(key, value);
         fileCache.put(element);
         fileCache.flush();
     }  
-    public static OutputStream getFile(String key){  
+    public static byte[] getFile(String key){  
         Element element =fileCache.get(key);  
         if(element!=null){  
-            return (OutputStream)element.getObjectValue();  
+            return (byte[])element.getObjectValue();  
         }  
         return null;  
     } 
@@ -56,15 +54,15 @@ public class CacheUtil {
     	fileCache.remove(key) ;
     }
     
-    public static void putData(String key,OutputStream value){  
+    public static void putData(String key,byte[] value){  
         Element element = new Element(key, value);
         dataCache.put(element);
         dataCache.flush();
     }  
-    public static OutputStream getData(String key){  
+    public static byte[] getData(String key){  
         Element element =dataCache.get(key);  
         if(element!=null){  
-            return (OutputStream)element.getObjectValue();  
+            return (byte[])element.getObjectValue();  
         }  
         return null;  
     } 

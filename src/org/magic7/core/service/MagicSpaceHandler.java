@@ -461,7 +461,6 @@ public class MagicSpaceHandler {
 		String displayName = null;
 		try {
 			for(MagicTriggerAssembler assembler:assemblers) {
-				System.out.println("assembler:"+assembler.getCodeName());
 				String parameterNames = assembler.getParameterNames();
 				displayName = assembler.getDisplayName();
 				Object[] inParams = null;

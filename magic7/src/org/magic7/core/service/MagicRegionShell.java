@@ -117,11 +117,15 @@ public class MagicRegionShell {
 		}
 		return output.toByteArray();
 	}
+	
 	public static void cacheFile(MagicSuperRowItem item,byte[] output) {
-		cacheFile(item.getRowId()+"."+item.getId(), output);
+		CacheUtil.putFile(item.getRowId()+"."+item.getId(), output,null);
 	}
-	public static void cacheFile(String key,byte[] output) {
-		CacheUtil.putFile(key, output);
+	public static void cacheFile(MagicSuperRowItem item,byte[] output,int timeToLiveSeconds) {
+		cacheFile(item.getRowId()+"."+item.getId(), output,timeToLiveSeconds);
+	}
+	public static void cacheFile(String key,byte[] output,int timeToLiveSeconds) {
+		CacheUtil.putFile(key, output,timeToLiveSeconds);
 	}
 	public static void getCacheFile(MagicSuperRowItem item,byte[] output) {
 		getCacheFile(item.getRowId()+"."+item.getId());
@@ -131,10 +135,13 @@ public class MagicRegionShell {
 	}
 	
 	public static void cacheImage(MagicSuperRowItem item,byte[] output) {
-		cacheImage(item.getRowId()+"."+item.getId(), output);
+		CacheUtil.putImage(item.getRowId()+"."+item.getId(), output,null);
 	}
-	public static void cacheImage(String key,byte[] output) {
-		CacheUtil.putImage(key, output);
+	public static void cacheImage(MagicSuperRowItem item,byte[] output,int timeToLiveSeconds) {
+		cacheImage(item.getRowId()+"."+item.getId(), output,timeToLiveSeconds);
+	}
+	public static void cacheImage(String key,byte[] output,int timeToLiveSeconds) {
+		CacheUtil.putImage(key, output,timeToLiveSeconds);
 	}
 	public static void getCacheImage(MagicSuperRowItem item,byte[] output) {
 		getCacheImage(item.getRowId()+"."+item.getId());
@@ -144,5 +151,21 @@ public class MagicRegionShell {
 	}
 	public String generateRandomNum(int length) {
 		return SecurityUtil.generateRandomNum(length);
+	}
+	
+	public static void cacheData(MagicSuperRowItem item,byte[] output) {
+		CacheUtil.putData(item.getRowId()+"."+item.getId(), output,null);
+	}
+	public static void cacheData(MagicSuperRowItem item,byte[] output,int timeToLiveSeconds) {
+		cacheData(item.getRowId()+"."+item.getId(), output,timeToLiveSeconds);
+	}
+	public static void cacheData(String key,byte[] output,int timeToLiveSeconds) {
+		CacheUtil.putData(key, output,timeToLiveSeconds);
+	}
+	public static void getCacheData(MagicSuperRowItem item,byte[] output) {
+		getCacheData(item.getRowId()+"."+item.getId());
+	}
+	public static byte[] getCacheData(String key) {
+		return CacheUtil.getData(key);
 	}
 }

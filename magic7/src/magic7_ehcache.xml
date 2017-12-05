@@ -4,17 +4,17 @@
 	<defaultCache maxElementsInMemory="10000" eternal="false" overflowToDisk="true" timeToIdleSeconds="6000" timeToLiveSeconds="6000" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />  
     <cache   
         name="image" 
-       	maxElementsInMemory="0" eternal="true"  
+       	maxElementsInMemory="0" eternal="false" timeToLiveSeconds="1200" 
         overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000"  
         diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
    <cache   
 	   name="file" 
-	  	maxElementsInMemory="0" eternal="true"  
+	  	maxElementsInMemory="0" eternal="false" timeToLiveSeconds="1200" 
 	   overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000"  
 	   diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
 	<cache   
 	   name="data" 
-	  	maxElementsInMemory="0" eternal="true"  
+	  	maxElementsInMemory="0" eternal="true" timeToLiveSeconds="1200" 
 	   overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000"  
 	   diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
 </ehcache>  

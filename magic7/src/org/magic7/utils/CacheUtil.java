@@ -22,8 +22,10 @@ public class CacheUtil {
     	data;
     };  
       
-    public static void putImage(String key,Object value){  
+    public static void putImage(String key,Object value,Integer timeToLiveSeconds){  
         Element element = new Element(key, value);
+        if(timeToLiveSeconds!=null)
+        	element.setTimeToLive(timeToLiveSeconds);
 	    imageCache.put(element);
         imageCache.flush();
     }  
@@ -38,8 +40,10 @@ public class CacheUtil {
         imageCache.remove(key) ;
     }
     
-    public static void putFile(String key,byte[] value){  
+    public static void putFile(String key,byte[] value,Integer timeToLiveSeconds){  
         Element element = new Element(key, value);
+        if(timeToLiveSeconds!=null)
+        	element.setTimeToLive(timeToLiveSeconds);
         fileCache.put(element);
         fileCache.flush();
     }  
@@ -54,8 +58,10 @@ public class CacheUtil {
     	fileCache.remove(key) ;
     }
     
-    public static void putData(String key,byte[] value){  
+    public static void putData(String key,byte[] value,Integer timeToLiveSeconds){  
         Element element = new Element(key, value);
+        if(timeToLiveSeconds!=null)
+        	element.setTimeToLive(timeToLiveSeconds);
         dataCache.put(element);
         dataCache.flush();
     }  

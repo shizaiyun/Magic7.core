@@ -25,7 +25,8 @@ import org.magic7.dynamic.loader.MagicLoaderUtils;
 public class MagicDao extends BaseDao {
 	private MagicDao(){}
 	private static MagicDao instance = new MagicDao();
-	private static String objectQuery = " and item.OBJECT_ID=:objectId ";
+	private static String objectQueryWithRow = " and row.OBJECT_ID=:objectId ";
+	private static String objectQueryWithRowItem = " and item.OBJECT_ID=:objectId ";
 	private static String dimensionQuery = " and item.DISPLAY_NAME=:dimensionDisplayName " +
 			" and (STR_VALUE is not null or DATE_VALUE is not null or LIST_STR_VALUE is not null or NUM_VALUE is not null " +
 			" or BOOLEAN_VALUE is not null )";
@@ -195,7 +196,7 @@ public class MagicDao extends BaseDao {
 					hql.append(" union ");
 				hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM item where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
 				if(StringUtils.isNotEmpty(objectId)) {
-					hql.append(objectQuery);
+					hql.append(objectQueryWithRowItem);
 					params.put("objectId", objectId);
 				}
 				if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
@@ -255,7 +256,7 @@ public class MagicDao extends BaseDao {
 							condition);
 				}
 				if(StringUtils.isNotEmpty(objectId)) {
-					hql.append(objectQuery);
+					hql.append(objectQueryWithRowItem);
 					params.put("objectId", objectId);
 				}
 				if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
@@ -370,7 +371,7 @@ public class MagicDao extends BaseDao {
 						+partition+"_ROW_ITEM target where item.SPACE_NAME=:spaceName and item.SPACE_REGION_NAME=:spaceRegionName and item.ENTITY_ID=target.id "
 								+ " and target.SPACE_NAME="+dimension.getSpaceName()+" and target.SPACE_REGION_NAME="+dimension.getSpaceRegionName()+condition);
 				if(StringUtils.isNotEmpty(objectId)) {
-					hql.append(objectQuery);
+					hql.append(objectQueryWithRowItem);
 					params.put("objectId", objectId);
 				}
 				if(StringUtils.isNotEmpty(displayName)&&displayName.equals(criteria.getDisplayName())) {
@@ -409,7 +410,7 @@ public class MagicDao extends BaseDao {
 			}
 			if(StringUtils.isNotEmpty(objectId)) {
 				System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq:"+objectId);
-				hql.append(objectQuery);
+				hql.append(objectQueryWithRow);
 				params.put("objectId", objectId);
 			}
 			return ;

@@ -1,5 +1,11 @@
 package org.magic7.core.service;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +15,10 @@ import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.service.impl.MagicServiceImpl;
 import org.magic7.utils.Dates;
+
+import com.sun.image.codec.jpeg.ImageFormatException;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class MagicRegionShell {
 	private static MagicServiceImpl service = MagicServiceImpl.getInstance();
@@ -77,5 +87,31 @@ public class MagicRegionShell {
 	}
 	public Date addDay(Date date, int day) {
 		return Dates.addDay(date,day);
+	}
+	public static void createValidationPicture(String code) {
+		// image初始化
+		BufferedImage image = new BufferedImage(90, 30, BufferedImage.TYPE_INT_RGB);
+		Graphics graphics = image.getGraphics();
+		// 图片各属性设置
+		graphics.setColor(new Color(255, 255, 255));
+		graphics.drawRect(60, 30, 90, 30);
+		graphics.fillRect(0, 0, 90, 30);
+		graphics.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		// 图片中插入字母
+		for (int i = 0; i < code.length(); i++) {
+			String temp = code.substring(i, i + 1);
+			graphics.setColor(new Color(102, 32, 176));
+			graphics.drawString(temp, 13 * i + 6, 16);
+		}
+		graphics.dispose();
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		JPEGImageEncoder jie = JPEGCodec.createJPEGEncoder(output);
+		try {
+			jie.encode(image);
+		} catch (ImageFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+		}
 	}
 }

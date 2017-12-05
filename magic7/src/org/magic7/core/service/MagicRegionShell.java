@@ -6,14 +6,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
+import org.magic7.core.domain.MagicRowItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.service.impl.MagicServiceImpl;
+import org.magic7.utils.CacheUtil;
 import org.magic7.utils.Dates;
 
 import com.sun.image.codec.jpeg.ImageFormatException;
@@ -113,5 +116,17 @@ public class MagicRegionShell {
 			e.printStackTrace();
 		} catch (IOException e1) {
 		}
+	}
+	public static void cacheFile(MagicRowItem item,OutputStream output) {
+		cacheFile(item.getRowId()+"."+item.getId(), output);
+	}
+	public static void cacheFile(String key,OutputStream output) {
+		CacheUtil.putFile(key, output);
+	}
+	public static void getCacheFile(MagicRowItem item,OutputStream output) {
+		getCacheFile(item.getRowId()+","+item.getId());
+	}
+	public static OutputStream getCacheFile(String key) {
+		return CacheUtil.getFile(key);
 	}
 }

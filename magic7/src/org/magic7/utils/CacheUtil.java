@@ -1,10 +1,12 @@
 package org.magic7.utils;
 
+import java.io.OutputStream;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-public class EHCacheUtil {  
+public class CacheUtil {  
     private static CacheManager cacheManager = null;
     private static Cache imageCache = null; 
     private static Cache fileCache = null; 
@@ -38,15 +40,15 @@ public class EHCacheUtil {
         imageCache.remove(key) ;
     }
     
-    public static void putFile(String key,Object value){  
+    public static void putFile(String key,OutputStream value){  
         Element element = new Element(key, value);
         fileCache.put(element);
         fileCache.flush();
     }  
-    public static Object getFile(String key){  
+    public static OutputStream getFile(String key){  
         Element element =fileCache.get(key);  
         if(element!=null){  
-            return element.getObjectValue();  
+            return (OutputStream)element.getObjectValue();  
         }  
         return null;  
     } 
@@ -54,15 +56,15 @@ public class EHCacheUtil {
     	fileCache.remove(key) ;
     }
     
-    public static void putData(String key,Object value){  
+    public static void putData(String key,OutputStream value){  
         Element element = new Element(key, value);
         dataCache.put(element);
         dataCache.flush();
     }  
-    public static Object getData(String key){  
+    public static OutputStream getData(String key){  
         Element element =dataCache.get(key);  
         if(element!=null){  
-            return element.getObjectValue();  
+            return (OutputStream)element.getObjectValue();  
         }  
         return null;  
     } 

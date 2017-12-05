@@ -398,14 +398,19 @@ public class MagicDao extends BaseDao {
 	public void buildListRowItemValueMap(StringBuilder hql,String partition,String objectId,List<MagicDimension> dimensions,
 			List<MagicDimension> searchCriterias,String displayName, Map<String,Object> params, Boolean valid) {
 		if(searchCriterias==null||searchCriterias.size()==0) {
-			if(StringUtils.isNotEmpty(displayName)) {
+			if(StringUtils.isNotEmpty(displayName)||StringUtils.isNotEmpty(objectId)) {
 				hql.append(", "+partition+"_ROW_ITEM item ");
 			}
-			hql.append(" where row.valid=:valid");
+			hql.append(" where row.SPACE_NAME=:spaceName and row.REGION_NAME=:spaceRegionName and row.valid=:valid");
 			params.put("valid", valid);
 			if(StringUtils.isNotEmpty(displayName)) {
 				hql.append(dimensionQuery);
 				params.put("dimensionDisplayName", displayName);
+			}
+			if(StringUtils.isNotEmpty(objectId)) {
+				System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq:"+objectId);
+				hql.append(objectQuery);
+				params.put("objectId", objectId);
 			}
 			return ;
 		}
@@ -612,10 +617,8 @@ public class MagicDao extends BaseDao {
 		
 		if(orderBy!=null && !"".equals(orderBy))
 			hql.append(" order by row."+orderBy);
-		if(searchCriterias!=null&&searchCriterias.size()>0) {
-			params.put("spaceName", spaceName);
-			params.put("spaceRegionName", regionName);
-		}
+		params.put("spaceName", spaceName);
+		params.put("spaceRegionName", regionName);
 		return super.listWithSql(hql.toString(), params, "", MagicRegionRow.class.getCanonicalName(), start, count);
 	}
 	public Integer listRowCount(String partition,String spaceName,String regionName,String displayName, String objectId, Boolean valid, List<MagicDimension> searchCriterias) {
@@ -630,10 +633,8 @@ public class MagicDao extends BaseDao {
 		StringBuilder hql = new StringBuilder("select count(*) from (select distinct row.* from "+ServiceStaticInfo.TABLE_PREFIX+"_ROW row ");
 		buildListRowItemValueMap(hql,partition,objectId,dimensions,searchCriterias,displayName, params, valid);
 		
-		if(searchCriterias!=null&&searchCriterias.size()>0) {
-			params.put("spaceName", spaceName);
-			params.put("spaceRegionName", regionName);
-		}
+		params.put("spaceName", spaceName);
+		params.put("spaceRegionName", regionName);
 		hql.append(" ) y"); 
 		return super.listCountWithSQL(hql.toString(), params);
 	}

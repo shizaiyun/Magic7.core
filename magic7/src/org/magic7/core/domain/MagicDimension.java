@@ -17,7 +17,39 @@ import org.springframework.beans.BeanUtils;
 @Entity
 @Table(name = ServiceStaticInfo.TABLE_PREFIX+"_DIMENSION")
 public class MagicDimension {
-	
+	public enum PersistenceType {
+		DATABASE("DATABASE",0),
+		TEMP("TEMP",1);
+		private String name;
+		private Integer code;
+		private PersistenceType(String name,Integer code) {
+			this.name = name;
+			this.code = code;
+		}
+		public static PersistenceType getPersistenceType(Integer code) {
+			PersistenceType[] types = values();
+			for(PersistenceType type:types) {
+				if(type.code.intValue()==code.intValue())
+					return type;
+			}
+			return null;
+		}
+		public String toString() {
+			return "name:"+this.name+";"+"code:"+this.code;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public Integer getCode() {
+			return code;
+		}
+		public void setCode(Integer code) {
+			this.code = code;
+		}
+	}
 	public enum DefaultValue {
 		CURRENT_USER("CURRENT_USER",0),
 		CURRENT_DATE("CURRENT_DATE",1),
@@ -52,12 +84,10 @@ public class MagicDimension {
 			this.code = code;
 		}
 	}
-	
 	public enum Destination {
 		FOR_DATA("FOR_DATA",0),
 		FOR_QUERY("FOR_QUERY",1),
-		FOR_BUTTON("FOR_BUTTON",2),
-		FOR_TEMP("TEMP",3);
+		FOR_BUTTON("FOR_BUTTON",2);
 		private String name;
 		private Integer code;
 		private Destination(String name,Integer code) {
@@ -88,7 +118,6 @@ public class MagicDimension {
 			this.code = code;
 		}
 	}
-	
 	public enum PageType {
 		TEXT_EDITOR("TextEditor",0),
 		DROP_DOWN_LIST("Drop_Down_List",1),
@@ -96,7 +125,9 @@ public class MagicDimension {
 		BUTTON("Button",3),
 		TEXT_AREA("Text_Area",4),
 		CHECK_BOX("CHECK_BOX",5),
-		RADIO("RADIO",6);
+		RADIO("RADIO",6),
+		IMAGE("IMAGE",7),
+		A_HREF("A_HREF",8);
 		private String name;
 		private Integer code;
 		private PageType(String name,Integer code) {
@@ -322,6 +353,9 @@ public class MagicDimension {
 	
 	@Column(name = "BUTTON_TRIGGER",length = 300)
 	private String buttonTrigger;//当destination为FOR_BUTTON时有效,用来定义button的触发事件
+	
+	@Column(name = "PERSISTENCE_TYPE")
+	private Integer persistenceType;
 	
 	@Transient
 	private String pageShowName;
@@ -574,6 +608,12 @@ public class MagicDimension {
 	}
 	public void setButtonTrigger(String buttonTrigger) {
 		this.buttonTrigger = buttonTrigger;
+	}
+	public Integer getPersistenceType() {
+		return persistenceType;
+	}
+	public void setPersistenceType(Integer persistenceType) {
+		this.persistenceType = persistenceType;
 	}
 }
  

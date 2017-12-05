@@ -145,10 +145,11 @@ public class MagicSpaceHandler {
 	}
 	public static void setRowItemValue(MagicSuperRowItem item,Object value) {
 		ServiceUtil.notNull(item, "item is null");
-		if(item.getViewItem()==null&&item.getRequired())
+		//TODO 提交保存的时候，view信息没有从页面带过来，会出错，暂时屏蔽，后面来改
+		/*if(item.getViewItem()==null&&item.getRequired())
 			ServiceUtil.notNull(value,item.getDisplayName()+"'s value is null");
-		if(item.getViewItem()!=null&&item.getViewItem().getRequired()!=null&&item.getViewItem().getRequired())
-			ServiceUtil.notNull(value,item.getDisplayName()+"'s value is null");
+		if(item.getViewItem()!=null&&item.getViewItem().getRequired()!=null)
+			ServiceUtil.notNull(value,item.getDisplayName()+"'s value is null");*/
 		if(MagicDimension.ValueType.STR_VALUE.getCode().equals(item.getValueType()))
 			if(value==null) {
 				item.setStrValue(null);
@@ -221,7 +222,7 @@ public class MagicSpaceHandler {
 			Object obj = null;
 			Object value = null;
 			for(MagicSuperRowItem item:values) {
-				if(MagicDimension.Destination.FOR_TEMP.getCode().equals(item.getValueType()))
+				if(MagicDimension.PersistenceType.TEMP.getCode().equals(item.getValueType()))
 					continue;
 				/*if(row.getValid()) {
 					if(item.getRequired()&&getRowItemValue(item)==null)
@@ -257,7 +258,7 @@ public class MagicSpaceHandler {
 		ServiceUtil.notNull(objectRegion, "region is null");
 		String rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(space.getPartition());
 		if(StringUtils.isNotEmpty(spaceRegion.getPartition()))
-			rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(spaceRegion.getPartition());;
+			rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(spaceRegion.getPartition());
 		MagicRegionRow row = new MagicRegionRow();
 		row.setObjectId(objectId);
 		row.setRegionId(objectRegion.getId());
@@ -306,6 +307,51 @@ public class MagicSpaceHandler {
 		}
 		row.setRowItems(values);
 		return row;
+	}
+	public static void createRowItem(String spaceName,String regionName,MagicDimension dimension,String objectId,String rowId) {
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		ServiceUtil.notNull(regionName, "regionName is null");
+		ServiceUtil.notNull(objectId, "objectId is null");
+		MagicSpace space = service.getSpaceByName(spaceName);
+		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
+		ServiceUtil.notNull(spaceRegion, "spaceRegion is null");
+		MagicObjectRegion objectRegion = service.getObjectRegion(objectId, spaceRegion.getName());
+		ServiceUtil.notNull(objectRegion, "region is null");
+		MagicSuperRowItem item = null;
+		String rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(space.getPartition());
+		if(StringUtils.isNotEmpty(spaceRegion.getPartition()))
+			rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(spaceRegion.getPartition());
+		try {
+			item = (MagicSuperRowItem) Class.forName(rowItemClassPath).newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		org.springframework.beans.BeanUtils.copyProperties(dimension, item);
+		item.setId(null);
+		item.setObjectId(objectId);
+		item.setRegionId(objectRegion.getId());
+		item.setSpaceId(objectRegion.getSpaceId());
+		item.setSpaceRegionId(objectRegion.getSpaceRegionId());
+		item.setRowId(rowId);
+		item.setCreateDate(new Date());
+		item.setDimensionId(dimension.getId());
+		item.setDimensionName(dimension.getName());
+		item.setSeq(dimension.getSeq());
+		item.setPageType(dimension.getPageType());
+		item.setDisplayName(dimension.getDisplayName());
+		item.setSpaceName(objectRegion.getSpaceName());
+		item.setRegionName(objectRegion.getName());
+		item.setDualLnk(dimension.getDualLnk());
+		item.setDualEntityName(dimension.getDualEntityName());
+		item.setTailLabel(dimension.getTailLabel());
+		item.setVisible(dimension.getVisible());
+		item.setEditable(dimension.getEditable());
+		item.setSpaceRegionName(objectRegion.getName());
+		if(MagicDimension.DefaultValue.CURRENT_DATE.getName().equals(item.getDefaultValue())) {
+			item.setDateValue(new Date());
+			item.setValueName(Dates.format(item.getDateValue(), Dates.DATETIME_FORMAT));
+		}  else if(item.getDefaultValue()!=null)
+			setRowItemValue(item, item.getDefaultValue());
 	}
 	public static MagicObject createMagicObject(MagicObject object) {
 		ServiceUtil.notNull(object.getSpaceId(), "object.spaceId is null");

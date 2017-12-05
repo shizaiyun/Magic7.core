@@ -6,18 +6,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
-import org.magic7.core.domain.MagicRowItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.service.impl.MagicServiceImpl;
 import org.magic7.utils.CacheUtil;
 import org.magic7.utils.Dates;
+import org.magic7.utils.SecurityUtil;
 
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -91,7 +90,7 @@ public class MagicRegionShell {
 	public Date addDay(Date date, int day) {
 		return Dates.addDay(date,day);
 	}
-	public static void createValidationPicture(String code) {
+	public static byte[] createValidationPicture(String code) {
 		// image初始化
 		BufferedImage image = new BufferedImage(90, 30, BufferedImage.TYPE_INT_RGB);
 		Graphics graphics = image.getGraphics();
@@ -116,17 +115,34 @@ public class MagicRegionShell {
 			e.printStackTrace();
 		} catch (IOException e1) {
 		}
+		return output.toByteArray();
 	}
-	public static void cacheFile(MagicRowItem item,OutputStream output) {
+	public static void cacheFile(MagicSuperRowItem item,byte[] output) {
 		cacheFile(item.getRowId()+"."+item.getId(), output);
 	}
-	public static void cacheFile(String key,OutputStream output) {
+	public static void cacheFile(String key,byte[] output) {
 		CacheUtil.putFile(key, output);
 	}
-	public static void getCacheFile(MagicRowItem item,OutputStream output) {
-		getCacheFile(item.getRowId()+","+item.getId());
+	public static void getCacheFile(MagicSuperRowItem item,byte[] output) {
+		getCacheFile(item.getRowId()+"."+item.getId());
 	}
-	public static OutputStream getCacheFile(String key) {
+	public static byte[] getCacheFile(String key) {
 		return CacheUtil.getFile(key);
+	}
+	
+	public static void cacheImage(MagicSuperRowItem item,byte[] output) {
+		cacheImage(item.getRowId()+"."+item.getId(), output);
+	}
+	public static void cacheImage(String key,byte[] output) {
+		CacheUtil.putImage(key, output);
+	}
+	public static void getCacheImage(MagicSuperRowItem item,byte[] output) {
+		getCacheImage(item.getRowId()+"."+item.getId());
+	}
+	public static byte[] getCacheImage(String key) {
+		return CacheUtil.getImage(key);
+	}
+	public String generateRandomNum(int length) {
+		return SecurityUtil.generateRandomNum(length);
 	}
 }

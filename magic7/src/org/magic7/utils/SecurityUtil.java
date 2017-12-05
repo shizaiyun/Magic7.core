@@ -43,7 +43,7 @@ public class SecurityUtil {
 	private static Random rand = new Random();
 	private static Integer[] numbers = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-	public static String generateRandomNum(long length) {
+	public static String generateRandomNum(int length) {
 		StringBuilder buffer = new StringBuilder();
 		int temp = 0;
 		for (int i = 0; i < length;) {

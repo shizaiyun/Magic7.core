@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<ehcache>  
+	<diskStore path="c:/temp2"/>  
+	<defaultCache maxElementsInMemory="10000" eternal="false" overflowToDisk="true" timeToIdleSeconds="6000" timeToLiveSeconds="6000" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />  
+    <cache   
+        name="cache_campain" 
+       	maxElementsInMemory="0" eternal="true"  
+        overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000"  
+        diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
+</ehcache>  

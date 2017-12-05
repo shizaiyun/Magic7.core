@@ -175,7 +175,6 @@ public class MagicLoaderUtils {
 				clazz = Class.forName(classPath);
 				classtPool.put(classPath, clazz);
 			}
-			System.out.println(params[0]);
 			instance = clazz.newInstance();
 			objectPool.put(classPath, instance);
 		}

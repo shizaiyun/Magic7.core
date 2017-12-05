@@ -145,6 +145,9 @@ private static final String SEQ = ServiceStaticInfo.TABLE_PREFIX+"RowItem";
 	@Column(name = "EDITABLE")
 	private Boolean editable;
 	
+	@Column(name = "PERSISTENCE_TYPE")
+	private Integer persistenceType;
+	
 	@Transient
 	private MagicSpaceRegionViewItem viewItem;
 	
@@ -389,6 +392,12 @@ private static final String SEQ = ServiceStaticInfo.TABLE_PREFIX+"RowItem";
 	}
 	public void setSpaceRegionName(String spaceRegionName) {
 		this.spaceRegionName = spaceRegionName;
+	}
+	public Integer getPersistenceType() {
+		return persistenceType;
+	}
+	public void setPersistenceType(Integer persistenceType) {
+		this.persistenceType = persistenceType;
 	}
 }
  

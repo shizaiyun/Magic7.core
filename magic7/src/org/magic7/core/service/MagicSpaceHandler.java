@@ -222,7 +222,7 @@ public class MagicSpaceHandler {
 			Object obj = null;
 			Object value = null;
 			for(MagicSuperRowItem item:values) {
-				if(MagicDimension.PersistenceType.TEMP.getCode().equals(item.getValueType()))
+				if(MagicDimension.PersistenceType.TEMP.getCode().equals(item.getPersistenceType()))
 					continue;
 				/*if(row.getValid()) {
 					if(item.getRequired()&&getRowItemValue(item)==null)
@@ -251,14 +251,10 @@ public class MagicSpaceHandler {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
 		ServiceUtil.notNull(objectId, "objectId is null");
-		MagicSpace space = service.getSpaceByName(spaceName);
 		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
 		ServiceUtil.notNull(spaceRegion, "spaceRegion is null");
 		MagicObjectRegion objectRegion = service.getObjectRegion(objectId, spaceRegion.getName());
 		ServiceUtil.notNull(objectRegion, "region is null");
-		String rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(space.getPartition());
-		if(StringUtils.isNotEmpty(spaceRegion.getPartition()))
-			rowItemClassPath = MagicLoaderUtils.getDynamicRowItemClassName(spaceRegion.getPartition());
 		MagicRegionRow row = new MagicRegionRow();
 		row.setObjectId(objectId);
 		row.setRegionId(objectRegion.getId());
@@ -272,43 +268,13 @@ public class MagicSpaceHandler {
 		MagicSuperRowItem item = null;
 		List<MagicSuperRowItem> values = new ArrayList<>();
 		for(MagicDimension dimension:dimensions) {
-			try {
-				item = (MagicSuperRowItem) Class.forName(rowItemClassPath).newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-			org.springframework.beans.BeanUtils.copyProperties(dimension, item);
-			item.setId(null);
-			item.setObjectId(objectId);
-			item.setRegionId(objectRegion.getId());
-			item.setSpaceId(objectRegion.getSpaceId());
-			item.setSpaceRegionId(objectRegion.getSpaceRegionId());
-			item.setRowId(row.getId());
-			item.setCreateDate(row.getCreateDate());
-			item.setDimensionId(dimension.getId());
-			item.setDimensionName(dimension.getName());
-			item.setSeq(dimension.getSeq());
-			item.setPageType(dimension.getPageType());
-			item.setDisplayName(dimension.getDisplayName());
-			item.setSpaceName(objectRegion.getSpaceName());
-			item.setRegionName(objectRegion.getName());
-			item.setDualLnk(dimension.getDualLnk());
-			item.setDualEntityName(dimension.getDualEntityName());
-			item.setTailLabel(dimension.getTailLabel());
-			item.setVisible(dimension.getVisible());
-			item.setEditable(dimension.getEditable());
-			item.setSpaceRegionName(objectRegion.getName());
-			if(MagicDimension.DefaultValue.CURRENT_DATE.getName().equals(item.getDefaultValue())) {
-				item.setDateValue(new Date());
-				item.setValueName(Dates.format(item.getDateValue(), Dates.DATETIME_FORMAT));
-			}  else if(item.getDefaultValue()!=null)
-				setRowItemValue(item, item.getDefaultValue());
+			item = createRowItem(spaceName, regionName, dimension, objectId, row.getId());
 			values.add(item);
 		}
 		row.setRowItems(values);
 		return row;
 	}
-	public static void createRowItem(String spaceName,String regionName,MagicDimension dimension,String objectId,String rowId) {
+	public static MagicSuperRowItem createRowItem(String spaceName,String regionName,MagicDimension dimension,String objectId,String rowId) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
 		ServiceUtil.notNull(objectId, "objectId is null");
@@ -352,6 +318,7 @@ public class MagicSpaceHandler {
 			item.setValueName(Dates.format(item.getDateValue(), Dates.DATETIME_FORMAT));
 		}  else if(item.getDefaultValue()!=null)
 			setRowItemValue(item, item.getDefaultValue());
+		return item;
 	}
 	public static MagicObject createMagicObject(MagicObject object) {
 		ServiceUtil.notNull(object.getSpaceId(), "object.spaceId is null");
@@ -522,6 +489,7 @@ public class MagicSpaceHandler {
 							inParams[i] = params.get(names[i]);
 					}
 				}
+				codeName = assembler.getCodeName();
 				MagicLoaderUtils.invokeRegionCode(row.getSpaceName(), row.getRegionName(),assembler.getCodeName() , inParams);
 			}
 		} catch (Exception e) {
@@ -547,9 +515,10 @@ public class MagicSpaceHandler {
 	public static MagicSuperRowItem getRowItemFromRow(MagicRegionRow row,String displayName) {
 		if(row.getRowItems()==null||StringUtils.isEmpty(displayName))
 			return null;
-		for(MagicSuperRowItem item:row.getRowItems()) 
+		for(MagicSuperRowItem item:row.getRowItems()) {
 			if(displayName.equals(item.getDisplayName()))
 				return item;
+		}
 		return null;
 	}
 	public static Integer listRowCount(String spaceName,String regionName,

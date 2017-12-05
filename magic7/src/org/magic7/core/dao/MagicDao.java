@@ -402,15 +402,17 @@ public class MagicDao extends BaseDao {
 			if(StringUtils.isNotEmpty(displayName)) {
 				hql.append(", "+partition+"_ROW_ITEM item ");
 			}
-			hql.append(" where row.SPACE_NAME=:spaceName and row.REGION_NAME=:spaceRegionName and row.valid=:valid");
-			params.put("valid", valid);
+			hql.append(" where row.SPACE_NAME=:spaceName and row.REGION_NAME=:spaceRegionName ");
+			if(valid!=null) {
+				hql.append(" and row.valid=:valid");
+				params.put("valid", valid);
+			}
 			if(StringUtils.isNotEmpty(displayName)) {
 				hql.append(dimensionQuery);
 				hql.append(" and row.id=item.ROW_ID ");
 				params.put("dimensionDisplayName", displayName);
 			}
 			if(StringUtils.isNotEmpty(objectId)) {
-				System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq:"+objectId);
 				hql.append(objectQueryWithRow);
 				params.put("objectId", objectId);
 			}

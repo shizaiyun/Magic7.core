@@ -76,6 +76,7 @@ public class MagicUtil {
 		dimension.setQueryType(queryType);
 		dimension.setDualLnk(dualLnk);
 		dimension.setDualEntityName(dualEntityName);
+		dimension.setPersistenceType(MagicDimension.PersistenceType.DATABASE.getCode());
 		return dimension;
 	}
 	public static void bindView(MagicDimension dimension,MagicSpaceRegionView view,Integer seq ) {

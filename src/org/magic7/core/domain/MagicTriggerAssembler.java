@@ -45,7 +45,7 @@ public class MagicTriggerAssembler {
 	private String parameterNames;
 	
 	@Column(name = "ASSEMBLER_PARAMETER", length = 500)
-	private String assemblerParameter;
+	private String assemblerParameter;//TODO:目前只能传一个String参数，以后改进
 	
 	public String getId() {
 		return id;

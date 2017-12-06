@@ -154,19 +154,19 @@ public class MagicRegionShell {
 		return SecurityUtil.generateRandomNum(length);
 	}
 	
-	public static void cacheData(MagicSuperRowItem item,byte[] output) {
-		CacheUtil.putData(item.getRowId()+"."+item.getId(), output,null);
+	public static void cacheData(MagicSuperRowItem item,Object data) {
+		CacheUtil.putData(item.getRowId()+"."+item.getId(), data,null);
 	}
-	public static void cacheData(MagicSuperRowItem item,byte[] output,int timeToLiveSeconds) {
-		cacheData(item.getRowId()+"."+item.getId(), output,timeToLiveSeconds);
+	public static void cacheData(MagicSuperRowItem item,Object data,int timeToLiveSeconds) {
+		cacheData(item.getRowId()+"."+item.getId(), data,timeToLiveSeconds);
 	}
-	public static void cacheData(String key,byte[] output,int timeToLiveSeconds) {
-		CacheUtil.putData(key, output,timeToLiveSeconds);
+	public static void cacheData(String key,Object data,int timeToLiveSeconds) {
+		CacheUtil.putData(key, data,timeToLiveSeconds);
 	}
-	public static void getCacheData(MagicSuperRowItem item,byte[] output) {
+	public static void getCacheData(MagicSuperRowItem item) {
 		getCacheData(item.getRowId()+"."+item.getId());
 	}
-	public static byte[] getCacheData(String key) {
+	public static Object getCacheData(String key) {
 		return CacheUtil.getData(key);
 	}
 	public String generateUUID() {

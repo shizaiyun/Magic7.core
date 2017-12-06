@@ -58,17 +58,17 @@ public class CacheUtil {
     	fileCache.remove(key) ;
     }
     
-    public static void putData(String key,byte[] value,Integer timeToLiveSeconds){  
+    public static void putData(String key,Object value,Integer timeToLiveSeconds){  
         Element element = new Element(key, value);
         if(timeToLiveSeconds!=null)
         	element.setTimeToLive(timeToLiveSeconds);
         dataCache.put(element);
         dataCache.flush();
     }  
-    public static byte[] getData(String key){  
+    public static Object getData(String key){  
         Element element =dataCache.get(key);  
         if(element!=null){  
-            return (byte[])element.getObjectValue();  
+            return element.getObjectValue();  
         }  
         return null;  
     } 

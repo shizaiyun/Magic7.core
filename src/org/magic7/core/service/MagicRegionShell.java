@@ -187,4 +187,7 @@ public class MagicRegionShell {
 	public boolean isPhoneNumber(String phone) {
 		return ServiceUtil.isPhoneNumber(phone);
 	}
+	public void setContextParameter(String parameterName,Object value) {
+		MagicSpaceHandler.getInnerparameter().get().put(parameterName, value);
+	}
 }

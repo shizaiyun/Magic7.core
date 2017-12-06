@@ -44,6 +44,9 @@ public class MagicTriggerAssembler {
 	@Column(name = "PARAMETER_NAMES", length = 500)
 	private String parameterNames;
 	
+	@Column(name = "ASSEMBLER_PARAMETER", length = 500)
+	private String assemblerParameter;
+	
 	public String getId() {
 		return id;
 	}
@@ -109,5 +112,11 @@ public class MagicTriggerAssembler {
 	}
 	public void setParameterNames(String parameterNames) {
 		this.parameterNames = parameterNames;
+	}
+	public String getAssemblerParameter() {
+		return assemblerParameter;
+	}
+	public void setAssemblerParameter(String assemblerParameter) {
+		this.assemblerParameter = assemblerParameter;
 	}
 }

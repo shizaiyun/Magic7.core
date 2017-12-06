@@ -160,6 +160,9 @@ public class MagicRegionShell {
 	public static void cacheData(MagicSuperRowItem item,Object data,int timeToLiveSeconds) {
 		cacheData(item.getRowId()+"."+item.getId(), data,timeToLiveSeconds);
 	}
+	public static void cacheData(String key,Object data) {
+		CacheUtil.putData(key, data,null);
+	}
 	public static void cacheData(String key,Object data,int timeToLiveSeconds) {
 		CacheUtil.putData(key, data,timeToLiveSeconds);
 	}

@@ -481,10 +481,12 @@ public class MagicSpaceHandler {
 					String names[] = parameterNames.split(",");
 					inParams = new Object[names.length];
 					for(int i=0;i<names.length;i++) {
-						if(i==0&&"defaultRowItem".equals(names[i]))
+						if("defaultRowItem".equals(names[i]))
 							inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
-						else if(i==0&&"defaultRow".equals(names[i]))
+						else if("defaultRow".equals(names[i]))
 							inParams[i] = row;
+						else if("assemblerParameter".equals(names[i]))
+							inParams[i] = assembler.getAssemblerParameter();
 						else
 							inParams[i] = params.get(names[i]);
 					}

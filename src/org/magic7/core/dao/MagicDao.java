@@ -194,6 +194,7 @@ public class MagicDao extends BaseDao {
 				}
 				if(index>0)
 					hql.append(" union ");
+				index++;
 				hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM item where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
 				if(StringUtils.isNotEmpty(objectId)) {
 					hql.append(objectQueryWithRowItem);
@@ -246,6 +247,7 @@ public class MagicDao extends BaseDao {
 				}
 				if(index>0)
 					hql.append(" union ");
+				index++;
 				if(!MagicDimension.ValueType.LIST_STR_VALUE.getCode().equals(dimension.getValueType())) {
 					hql.append(" select '"+criteria.getDisplayName()+"' as display_name,item.row_id from "+partition+"_ROW_ITEM item, " +tableName+" as target "+
 							" where item.SPACE_NAME=:spaceName and item.SPACE_REGION_NAME=:spaceRegionName and item.ENTITY_ID=target."+lnkDimension+
@@ -367,6 +369,7 @@ public class MagicDao extends BaseDao {
 				}
 				if(index>0)
 					hql.append(" union ");
+				index++;
 				hql.append(" select '"+criteria.getDisplayName()+"' as display_name,item.row_id from "+partition+"_ROW_ITEM item,"
 						+partition+"_ROW_ITEM target where item.SPACE_NAME=:spaceName and item.SPACE_REGION_NAME=:spaceRegionName and item.ENTITY_ID=target.id "
 								+ " and target.SPACE_NAME="+dimension.getSpaceName()+" and target.SPACE_REGION_NAME="+dimension.getSpaceRegionName()+condition);
@@ -393,7 +396,6 @@ public class MagicDao extends BaseDao {
 				else
 					queryDoubleRegions(hql, partition, objectId, displayName, dimension, searchCriterias, index, params);
 			}
-			index++;
 		}
 	}
 	public void buildListRowItemValueMap(StringBuilder hql,String partition,String objectId,List<MagicDimension> dimensions,

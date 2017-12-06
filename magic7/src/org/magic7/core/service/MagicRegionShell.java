@@ -17,6 +17,7 @@ import org.magic7.core.service.impl.MagicServiceImpl;
 import org.magic7.utils.CacheUtil;
 import org.magic7.utils.Dates;
 import org.magic7.utils.SecurityUtil;
+import org.magic7.utils.ServiceUtil;
 
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -167,5 +168,20 @@ public class MagicRegionShell {
 	}
 	public static byte[] getCacheData(String key) {
 		return CacheUtil.getData(key);
+	}
+	public String generateUUID() {
+		return SecurityUtil.generateUUID();
+	}
+	public boolean isFreshValue(MagicSuperRowItem item) {
+		return MagicSpaceHandler.isFreshValue(item);
+	}
+	public String encryptWithMd5(String text) {
+		return SecurityUtil.md5(text);
+	}
+	public boolean isEmail(String emailAddress) {
+		return ServiceUtil.isEmail(emailAddress);
+	}
+	public boolean isPhoneNumber(String phone) {
+		return ServiceUtil.isPhoneNumber(phone);
 	}
 }

@@ -621,5 +621,68 @@ public class MagicSpaceHandler {
 		}
 		return object;
 	}
+	
+	public static MagicObject createMagicObject(String spaceName) {
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		MagicObject object = new MagicObject();
+		MagicSpace space = service.getSpaceByName(spaceName);
+		ServiceUtil.notNull(space, "space is null");
+		object.setSpaceId(space.getId());
+		object.setSpaceName(space.getName());
+		
+		DaoAssistant.closeSessionByService();
+		DaoAssistant.currentSession(false);
+		try {
+			DaoAssistant.beginTransaction();
+			service.saveMagicObject(object);
+			DaoAssistant.commitTransaction();
+		} catch (Exception e) {
+			DaoAssistant.rollBackTransaction();
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			DaoAssistant.closeSessionByService();
+		}
+		return object;
+	}
+	
+	public static MagicRegionRow createMagicRegionRow(String spaceName,String regionName,String objectId,Boolean valid) {
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		ServiceUtil.notNull(regionName, "regionName is null");
+		ServiceUtil.notNull(regionName, "objectId is null");
+		MagicObject object = service.getMagicObjectById(objectId);
+		MagicObjectRegion objectRegion = service.getObjectRegion(objectId, regionName);
+		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
+		MagicRegionRow row = new MagicRegionRow();
+		DaoAssistant.closeSessionByService();
+		DaoAssistant.currentSession(false);
+		try {
+			DaoAssistant.beginTransaction();
+			if(objectRegion==null) {
+				MagicObjectRegion region = new MagicObjectRegion();
+				org.springframework.beans.BeanUtils.copyProperties(spaceRegion, region);
+				region.setObjectId(object.getId());
+				region.setId(null);
+				region.setSpaceRegionId(spaceRegion.getId());
+				region.setSpaceName(spaceRegion.getSpaceName());
+				region.setSeq(spaceRegion.getSeq());
+				region.setRegionType(spaceRegion.getRegionType());
+				region.setSourceName(spaceRegion.getSourceName());
+				region.setDimensionNum(spaceRegion.getDimensionNum());
+				region.setExtraEditor(spaceRegion.getExtraEditor());
+				service.saveObjectRegion(region);
+			}
+			row = createRow(object.getSpaceName(),spaceRegion.getName(),object.getId(),valid);
+			saveRow(row);
+			DaoAssistant.commitTransaction();
+		} catch (Exception e) {
+			DaoAssistant.rollBackTransaction();
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			DaoAssistant.closeSessionByService();
+		}
+		return row;
+	}
 }
  

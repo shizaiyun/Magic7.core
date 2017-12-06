@@ -30,6 +30,10 @@ import org.magic7.utils.Dates;
 import org.magic7.utils.ServiceUtil;
 public class MagicSpaceHandler {
 	public static MagicService service = MagicServiceFactory.getMagicService();
+	private static final ThreadLocal<Map<String,Object>> innerParameter = new ThreadLocal<Map<String,Object>>();
+	static ThreadLocal<Map<String, Object>> getInnerparameter() {
+		return innerParameter;
+	}
 	private MagicSpaceHandler() {}
 	public static List<MagicDimension> listDimension(String spaceName,String regionName,String viewName,String dimensionNames,Integer destination) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
@@ -472,6 +476,7 @@ public class MagicSpaceHandler {
 		List<MagicTriggerAssembler> assemblers = service.listTriggerAssembler(trigger, row.getSpaceName(), row.getRegionName(), " seq ");
 		String codeName = null;
 		String displayName = null;
+		innerParameter.set(params);
 		try {
 			for(MagicTriggerAssembler assembler:assemblers) {
 				String parameterNames = assembler.getParameterNames();

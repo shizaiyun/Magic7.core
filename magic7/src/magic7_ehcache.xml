@@ -14,7 +14,7 @@
 	   diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
 	<cache   
 	   name="data" 
-	  	maxElementsInMemory="0" eternal="true" timeToLiveSeconds="1200" 
+	  	maxElementsInMemory="0" eternal="true" timeToIdleSeconds="1200" 
 	   overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000"  
 	   diskPersistent="true" memoryStoreEvictionPolicy="LRU"/>
 </ehcache>  

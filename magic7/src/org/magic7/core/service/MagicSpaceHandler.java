@@ -30,7 +30,7 @@ import org.magic7.utils.Dates;
 import org.magic7.utils.ServiceUtil;
 public class MagicSpaceHandler {
 	public static MagicService service = MagicServiceFactory.getMagicService();
-	private static final ThreadLocal<Map<String,Object>> innerParameter = new ThreadLocal<Map<String,Object>>();
+	private static final ThreadLocal<Map<String,Object>> innerParameter = new ThreadLocal<Map<String,Object>>();//用于在用户自定义函数中传参数或传递函数的执行结果,key值为被调用函数的参数名
 	static ThreadLocal<Map<String, Object>> getInnerparameter() {
 		return innerParameter;
 	}

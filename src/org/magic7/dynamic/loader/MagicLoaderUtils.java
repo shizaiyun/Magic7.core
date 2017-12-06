@@ -45,6 +45,12 @@ public class MagicLoaderUtils {
 			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			pool.importPackage("java.math.BigDecimal");
 			pool.importPackage("java.util.Date");
+			pool.importPackage("java.util.List");
+			pool.importPackage("java.util.ArrayList");
+			pool.importPackage("java.util.HashMap");
+			pool.importPackage("java.util.Map");
+			pool.importPackage("java.util.Set");
+			pool.importPackage("java.util.HashSet");
 			
 			if (codeLib.getPackages() != null) {
 				String packages[] = codeLib.getPackages().split(";");
@@ -82,6 +88,12 @@ public class MagicLoaderUtils {
 			pool.importPackage("org.magic7.core.domain.MagicRegionRow");
 			pool.importPackage("java.math.BigDecimal");
 			pool.importPackage("java.util.Date");
+			pool.importPackage("java.util.List");
+			pool.importPackage("java.util.ArrayList");
+			pool.importPackage("java.util.HashMap");
+			pool.importPackage("java.util.Map");
+			pool.importPackage("java.util.Set");
+			pool.importPackage("java.util.HashSet");
 			
 			for (MagicCodeLib codeLib : libs) {
 				if (codeLib.getPackages() != null) {

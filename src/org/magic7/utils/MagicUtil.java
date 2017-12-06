@@ -186,7 +186,7 @@ public class MagicUtil {
 		dimension.setChoiceName(choiceName);
 		dimension.setChoiceCode(choiceCode);
 	}
-	public static MagicTriggerAssembler bindTrigger(String assemblerId,String triggerName,MagicCodeLib lib,MagicDimension dimension, Integer seq) {
+	public static MagicTriggerAssembler bindTrigger(String assemblerId,String triggerName,String assemblerParameter,MagicCodeLib lib, MagicDimension dimension, Integer seq) {
 		ServiceUtil.notNull(triggerName, "triggerName is null");
 		ServiceUtil.notNull(lib, "lib is null");
 		ServiceUtil.notNull(dimension, "dimension is null");
@@ -208,6 +208,7 @@ public class MagicUtil {
 		assembler.setSignature(lib.getSignature());
 		assembler.setTriggerName(triggerName);
 		assembler.setParameterNames(lib.getParameterNames());
+		assembler.setAssemblerParameter(assemblerParameter);
 		service.saveTriggerAssembler(assembler);
 		return assembler;
 	}

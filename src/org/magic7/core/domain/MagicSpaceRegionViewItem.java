@@ -80,6 +80,9 @@ public class MagicSpaceRegionViewItem {
 	
 	@Column(name = "CHOICE_NAME",length = 300)
 	private String choiceName;
+	
+	@Column(name = "REDIRECT_URL",length = 500)
+	private String redirectUrl;
 
 	public String getId() {
 		return id;
@@ -203,5 +206,11 @@ public class MagicSpaceRegionViewItem {
 	}
 	public void setChoiceName(String choiceName) {
 		this.choiceName = choiceName;
+	}
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
 	}
 }

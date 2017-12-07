@@ -358,9 +358,6 @@ public class MagicDimension {
 	@Column(name = "PERSISTENCE_TYPE")
 	private Integer persistenceType;
 	
-	@Column(name = "REDIRECT_URL",length = 500)
-	private String redirectUrl;
-	
 	@Transient
 	private String pageShowName;
 	
@@ -618,12 +615,6 @@ public class MagicDimension {
 	}
 	public void setPersistenceType(Integer persistenceType) {
 		this.persistenceType = persistenceType;
-	}
-	public String getRedirectUrl() {
-		return redirectUrl;
-	}
-	public void setRedirectUrl(String redirectUrl) {
-		this.redirectUrl = redirectUrl;
 	}
 }
  

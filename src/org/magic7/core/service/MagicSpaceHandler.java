@@ -317,6 +317,7 @@ public class MagicSpaceHandler {
 		item.setVisible(dimension.getVisible());
 		item.setEditable(dimension.getEditable());
 		item.setSpaceRegionName(objectRegion.getName());
+		item.setValueType(dimension.getValueType());
 		if(MagicDimension.DefaultValue.CURRENT_DATE.getName().equals(item.getDefaultValue())) {
 			item.setDateValue(new Date());
 			item.setValueName(Dates.format(item.getDateValue(), Dates.DATETIME_FORMAT));

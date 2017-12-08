@@ -1,5 +1,9 @@
 package org.magic7.core.domain;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -120,8 +124,8 @@ public class MagicSpaceRegionView {
 	@Column(name = "VIEW_TYPE")
 	private Integer viewType = ViewType.DEFAULT.code;
 	
-	@Column(name = "CUTOMER_PAGE_NAME",length=300)
-	private String cutomerPageName;
+	@Column(name = "CUSTOMER_PAGE_NAME",length=300)
+	private String customerPageName;
 	
 	public String getId() {
 		return id;
@@ -195,10 +199,35 @@ public class MagicSpaceRegionView {
 			return null;
 		return d.getName();
 	}
-	public String getCutomerPageName() {
-		return cutomerPageName;
+	public String getCustomerPageName() {
+		return customerPageName;
 	}
-	public void setCutomerPageName(String cutomerPageName) {
-		this.cutomerPageName = cutomerPageName;
+	public void setCustomerPageName(String customerPageName) {
+		this.customerPageName = customerPageName;
+	}
+	public String getCustomerPageContent(String rootDir) {
+		String path = rootDir+File.separator +customerPageName;
+		BufferedReader reader = null;
+		FileReader fileReader = null;
+		try {
+			fileReader = new FileReader(new File(path));
+			reader = new BufferedReader(fileReader);
+			StringBuilder buffer = new StringBuilder();
+			String content = null;
+			while((content=reader.readLine())!=null)
+				buffer.append(new String(content.getBytes("gbk"),"utf-8")+"\n");
+			return buffer.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(reader!=null)
+				try {
+					reader.close();
+					fileReader.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+		return null;
 	}
 }

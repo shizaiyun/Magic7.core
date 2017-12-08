@@ -2,7 +2,11 @@ package org.magic7.core.domain;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -208,14 +212,15 @@ public class MagicSpaceRegionView {
 	public String getCustomerPageContent(String rootDir) {
 		String path = rootDir+File.separator +customerPageName;
 		BufferedReader reader = null;
-		FileReader fileReader = null;
+		InputStreamReader fileReader = null;
+		
 		try {
-			fileReader = new FileReader(new File(path));
+			fileReader = new InputStreamReader(new FileInputStream(path), "UTF-8");
 			reader = new BufferedReader(fileReader);
 			StringBuilder buffer = new StringBuilder();
 			String content = null;
 			while((content=reader.readLine())!=null)
-				buffer.append(new String(content.getBytes("gbk"),"utf-8")+"\n");
+				buffer.append(content+"\n");
 			return buffer.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -229,5 +234,24 @@ public class MagicSpaceRegionView {
 				}
 		}
 		return null;
+	}
+	public Boolean saveCustomerPageContent(String rootDir,String content) {
+		Writer out = null;
+		String path = rootDir+File.separator +customerPageName;
+		try {
+			System.out.println(content);
+			out = new OutputStreamWriter(new FileOutputStream(path, false),"utf-8");
+			out.write(content);
+		} catch (Exception e) {
+			return false;
+		} finally {
+			if(out!=null)
+				try {
+					out.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+		return true;
 	}
 }

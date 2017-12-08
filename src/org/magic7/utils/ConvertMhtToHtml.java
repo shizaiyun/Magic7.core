@@ -132,8 +132,8 @@ public class ConvertMhtToHtml {
 	public static boolean SaveHtml(String s_HtmlTxt, String s_HtmlPath, String s_Encode) {
 		try {
 			Writer out = null;
-			out = new OutputStreamWriter(new FileOutputStream(s_HtmlPath, false), s_Encode);
-			out.write(s_HtmlTxt);
+			out = new OutputStreamWriter(new FileOutputStream(s_HtmlPath, false), "utf-8");
+			out.write("<%@ page language=\"java\" contentType=\"text/html; charset=UTF-8\" pageEncoding=\"UTF-8\"%>\n"+new String(s_HtmlTxt.getBytes(s_Encode),"utf-8"));
 			out.close();
 		} catch (Exception e) {
 			return false;

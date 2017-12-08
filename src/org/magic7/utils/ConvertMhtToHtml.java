@@ -34,21 +34,12 @@ public class ConvertMhtToHtml {
 	private static final Pattern base64ContentPattern = Pattern.compile("(\\?)[^\\?]{1,}(\u0001)");//用于处理Base64字符串
 	private static final Pattern linkPattern = Pattern.compile("(\\<link){1,1}[^\\>]{1,}[\\>]{1,1}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern hrefPattern = Pattern.compile("(href=(\\\"|\'))[^\\\"\']*(\\\"|\')", Pattern.CASE_INSENSITIVE);
+	public static void main(String a[]) {
+		mht2html("C:\\工作\\JPhish\\wangttt.mht","C:\\magic7_view\\WebContent\\uploadFile\\wangttt.html","test","http://127.0.0.1");
+	}
 
-	/**
-	 * 将 mht文件转换成 html文件
-	 * 
-	 * @param s_SrcMht
-	 * @param s_DescHtml
-	 */
 	public static String mht2html(String s_SrcMht, String s_DescHtml,String fileName,String address) {
 		try {
-			System.out.println("s_SrcMht:"+s_SrcMht);
-			System.out.println("s_DescHtml:"+s_DescHtml);
-			System.out.println("fileName:"+fileName);
-			String destFilePath = ("\u0000"+s_DescHtml.replaceAll(" ", "")).replaceAll("\\\\", "\u0001").replaceAll("\u0000[a-zA-Z0-9\u4e00-\u9fa5\\:^\u0001]*\u0001", "")
-					.replaceAll("\u0001", "").replaceAll("\u0000", "")+".files";
-			System.out.println("destFilePath:"+destFilePath);
 			
 			InputStream fis = new FileInputStream(s_SrcMht);
 			Session mailSession = Session.getDefaultInstance(System.getProperties(), null);
@@ -76,6 +67,10 @@ public class ConvertMhtToHtml {
 				for(Integer textIndex:textPart) {
 					MimeBodyPart bp1 = (MimeBodyPart) mp.getBodyPart(textIndex);
 					strEncodng = getEncoding(bp1);
+					if("multipart/alternative".equals(strEncodng)) {
+						bp1 = getAlternativePartContent(bp1);
+						strEncodng = getEncoding(bp1);
+					}
 					String body = getHtmlText(bp1,address+"\\"+File.separator+"uploadFile"+"\\"+File.separator+fileName+".files", strEncodng);
 					buffer.append(body);
 				}
@@ -96,16 +91,20 @@ public class ConvertMhtToHtml {
 					if (strUrl == null || strUrl.length() == 0)
 						continue;
 
-
-					String FilePath = parent.getAbsolutePath() + File.separator + getName(strUrl,binaryIndex);
-					File resources = new File(FilePath);
+					String filePath = parent.getAbsolutePath() + File.separator + getName(strUrl,binaryIndex).replaceAll("\\?[\\d\\D]*", "");
+					File resources = new File(filePath);
 					String urlRoot = getUrlRoot(getLocation(bp));
 					if (SaveResourcesFile(resources, bp.getInputStream(),urlRoot)) {
 						strText = strText.replace(strUrl, resources.getAbsolutePath());
 					}
 				}
-
+				
 				MimeBodyPart bp = (MimeBodyPart) mp.getBodyPart(textPart.get(0));
+				strEncodng = getEncoding(bp);
+				if("multipart/alternative".equals(strEncodng)) {
+					bp = getAlternativePartContent(bp);
+					strEncodng = getEncoding(bp);
+				}
 				strEncodng = getEncoding(bp);
 				SaveHtml(strText, s_DescHtml, strEncodng);
 				return strText;
@@ -141,11 +140,13 @@ public class ConvertMhtToHtml {
 		}
 		return true;
 	}
-	private static boolean SaveResourcesFile(File SrcFile, InputStream inputStream,String urlRoot) {
-		if (SrcFile == null || inputStream == null) {
+	private static boolean SaveResourcesFile(File srcFile, InputStream inputStream,String urlRoot) {
+		if (srcFile == null || inputStream == null) {
 			return false;
 		}
-		String fileName = SrcFile.getName();
+		String fileName = srcFile.getName();
+		if(urlRoot==null||"".equals(urlRoot))
+			return true;
 		if(fileName.contains(".css")) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			try {
@@ -155,7 +156,7 @@ public class ConvertMhtToHtml {
 					buffer.append(c+"\n");
 				}
 				c = buffer.toString().replaceAll("url\\(\\.\\.", "url("+urlRoot);
-				SaveHtml(c,SrcFile.getAbsolutePath(),"utf-8");
+				SaveHtml(c,srcFile.getAbsolutePath(),"utf-8");
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -172,7 +173,9 @@ public class ConvertMhtToHtml {
 			BufferedOutputStream osw = null;
 			try {
 				in = new BufferedInputStream(inputStream);
-				fio = new FileOutputStream(SrcFile);
+				if(!srcFile.exists())
+					srcFile.createNewFile();
+				fio = new FileOutputStream(srcFile);
 				osw = new BufferedOutputStream(new DataOutputStream(fio));
 				int index = 0;
 				byte[] a = new byte[1024];
@@ -293,6 +296,17 @@ public class ConvertMhtToHtml {
 		}
 		return null;
 	}
+	private static MimeBodyPart getAlternativePartContent(MimeBodyPart bp) {
+		try {
+			MimeMultipart part = (MimeMultipart)bp.getContent();
+			for (int i = 0; i < part.getCount(); ) {
+				return (MimeBodyPart) part.getBodyPart(i);
+			}
+		} catch(Exception e ){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	@SuppressWarnings("rawtypes")
 	private static String getEncoding(MimeBodyPart bp) {
 		if (bp == null) {
@@ -306,6 +320,9 @@ public class ConvertMhtToHtml {
 					String strType = head.getValue();
 					if(strType.indexOf("text/css")>=0) {
 						return null;
+					}
+					if(strType.indexOf("multipart/alternative")>=0) {
+						return "multipart/alternative";
 					}
 					int pos = strType.indexOf("charset=");
 					if (pos >= 0) {

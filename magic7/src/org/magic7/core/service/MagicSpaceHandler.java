@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -498,9 +499,21 @@ public class MagicSpaceHandler {
 							} else 
 								inParams[i] = row;
 						}
-						else if("assemblerParameter".equals(names[i]))
-							inParams[i] = assembler.getAssemblerParameter();
-						else
+						else if("assemblerParameter".equals(names[i])) {
+							String text = assembler.getAssemblerParameter();
+							String displayNames[] = extractDisplayNameFromText(text);
+							for(String name:displayNames) {
+								if(StringUtils.isEmpty(name))
+									continue;
+								MagicSuperRowItem item = getRowItemFromRow(row, name);
+								Object value = getRowItemValue(item);
+								if(value!=null)
+									text = text.replaceAll("\\{\\{."+name+"\\}\\}", value.toString());
+								else
+									text = text.replaceAll("\\{\\{."+name+"\\}\\}", "");
+							}
+							inParams[i] = text;
+						} else
 							inParams[i] = params.get(names[i]);
 					}
 				}
@@ -629,7 +642,6 @@ public class MagicSpaceHandler {
 		}
 		return object;
 	}
-	
 	public static MagicObject createMagicObject(String spaceName) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		MagicObject object = new MagicObject();
@@ -653,7 +665,6 @@ public class MagicSpaceHandler {
 		}
 		return object;
 	}
-	
 	public static MagicRegionRow createMagicRegionRow(String spaceName,String regionName,String objectId,Boolean valid) {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
@@ -691,6 +702,19 @@ public class MagicSpaceHandler {
 			DaoAssistant.closeSessionByService();
 		}
 		return row;
+	}
+	private static Pattern start = Pattern.compile("((\\{\\{\\.))");
+	private static Pattern end = Pattern.compile("(\\.\\}\\})");
+	private static Pattern body = Pattern.compile("\u0000[^\u0001]*\u0001");
+	private static Pattern finish = Pattern.compile("^\\,|\\,$");
+	public static String[] extractDisplayNameFromText(String text) {
+		ServiceUtil.notNull(text, "text is null");
+		text = "\u0000"+text+"\u0001";
+		text = start.matcher(text).replaceAll("\u0001");
+		text = end.matcher(text).replaceAll("\u0000");
+		text = body.matcher(text).replaceAll(",");
+		text = finish.matcher(text).replaceAll("");
+		return text.split(",");
 	}
 }
  

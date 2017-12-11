@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
 import org.magic7.core.domain.MagicSuperRowItem;
@@ -189,5 +190,8 @@ public class MagicRegionShell {
 	}
 	public void setContextParameter(String parameterName,Object value) {
 		MagicSpaceHandler.getInnerparameter().get().put(parameterName, value);
+	}
+	public boolean isEmptyStr(String str) {
+		return StringUtils.isEmpty(str);
 	}
 }

@@ -239,7 +239,6 @@ public class MagicSpaceRegionView {
 		Writer out = null;
 		String path = rootDir+File.separator +customerPageName;
 		try {
-			System.out.println(content);
 			out = new OutputStreamWriter(new FileOutputStream(path, false),"utf-8");
 			out.write(content);
 		} catch (Exception e) {

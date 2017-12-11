@@ -491,12 +491,14 @@ public class MagicSpaceHandler {
 						if("defaultRowItem".equals(names[i])) {
 							if(params.get("defaultRowItem")!=null)
 								inParams[i] = params.get("defaultRowItem");
-							else 
+							else if(params.get("defaultRow")!=null) {
+								inParams[i] = getRowItemFromRow((MagicRegionRow)params.get("defaultRow"), assembler.getDisplayName());
+							} else 
 								inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
 						} else if("defaultRow".equals(names[i])) {
-							if(params.get("defaultRow")!=null) {
+							if(params.get("defaultRow")!=null)
 								inParams[i] = params.get("defaultRow");
-							} else 
+							else 
 								inParams[i] = row;
 						}
 						else if("assemblerParameter".equals(names[i])) {

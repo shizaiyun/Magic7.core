@@ -216,7 +216,6 @@ public class MagicLoaderUtils {
 	public static void outPutClass(String path, String className, CtClass cls) {
 		try {
 			byte[] byteArr = cls.toBytecode();
-			System.out.println(new File(path + "//" + className + ".class").getCanonicalPath());
 			FileOutputStream fos = new FileOutputStream(new File(path + "//" + className + ".class"));
 			fos.write(byteArr);
 			fos.close();

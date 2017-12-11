@@ -41,6 +41,9 @@ public class MagicRegionShell {
 	public boolean saveRowItem(MagicSuperRowItem rowItem) {
 		return service.saveRowItem(rowItem);
 	}
+	public MagicRegionRow getRowById(String rowId) {
+		return MagicSpaceHandler.getRowById(rowId);
+	}
 	public MagicSuperRowItem getRowItemFromRow(MagicRegionRow row,String displayName) {
 		return MagicSpaceHandler.getRowItemFromRow(row, displayName);
 	}

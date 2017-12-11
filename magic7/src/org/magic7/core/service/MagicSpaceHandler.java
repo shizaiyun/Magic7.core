@@ -487,10 +487,17 @@ public class MagicSpaceHandler {
 					String names[] = parameterNames.split(",");
 					inParams = new Object[names.length];
 					for(int i=0;i<names.length;i++) {
-						if("defaultRowItem".equals(names[i]))
-							inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
-						else if("defaultRow".equals(names[i]))
-							inParams[i] = row;
+						if("defaultRowItem".equals(names[i])) {
+							if(params.get("defaultRowItem")!=null)
+								inParams[i] = params.get("defaultRowItem");
+							else 
+								inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
+						} else if("defaultRow".equals(names[i])) {
+							if(params.get("defaultRow")!=null) {
+								inParams[i] = params.get("defaultRow");
+							} else 
+								inParams[i] = row;
+						}
 						else if("assemblerParameter".equals(names[i]))
 							inParams[i] = assembler.getAssemblerParameter();
 						else
@@ -500,7 +507,7 @@ public class MagicSpaceHandler {
 				codeName = assembler.getCodeName();
 				MagicLoaderUtils.invokeRegionCode(row.getSpaceName(), row.getRegionName(),assembler.getCodeName() , inParams);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			throw new RuntimeException("invoke "+row.getSpaceName()+"-"+row.getRegionName()+"-"+codeName+" on "+displayName+" failed");
 		}

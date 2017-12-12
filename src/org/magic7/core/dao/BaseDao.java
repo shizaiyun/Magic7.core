@@ -136,7 +136,7 @@ public class BaseDao {
 					query.setParameter(key, value);
 				}
 			}
-			return query.setFirstResult(start).setMaxResults(count).list();
+			return query.setCacheable(true).setFirstResult(start).setMaxResults(count).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getCause());
@@ -162,7 +162,7 @@ public class BaseDao {
 					query.setParameter(key, value);
 				}
 			}
-			return query.addEntity(collectionName,className).setFirstResult(start).setMaxResults(count).list();
+			return query.addEntity(collectionName,className).setFirstResult(start).setMaxResults(count).setCacheable(true).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			//HibernateUtil.closeSession();
@@ -305,7 +305,7 @@ public class BaseDao {
 						query.setParameter(key, value);
 					}
 				}
-			return query.uniqueResult();
+			return query.setCacheable(true).uniqueResult();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			DaoAssistant.closeSession();

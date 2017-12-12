@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.magic7.core.dao.Magic7IdGenerator;
@@ -16,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 
 @Entity
 @Table(name = ServiceStaticInfo.TABLE_PREFIX+"_DIMENSION")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MagicDimension {
 	public enum PersistenceType {
 		DATABASE("DATABASE",0),

@@ -483,17 +483,18 @@ public class MagicSpaceHandler {
 			for(MagicTriggerAssembler assembler:assemblers) {
 				String parameterNames = assembler.getParameterNames();
 				displayName = assembler.getDisplayName();
+				codeName = assembler.getCodeName();
 				Object[] inParams = null;
 				if(StringUtils.isNotEmpty(parameterNames)) {
 					String names[] = parameterNames.split(",");
 					inParams = new Object[names.length];
 					for(int i=0;i<names.length;i++) {
 						if("defaultRowItem".equals(names[i])) {
-							if(params.get("defaultRowItem")!=null)
-								inParams[i] = params.get("defaultRowItem");
-							else if(params.get("defaultRow")!=null) {
+							if(params.get("defaultRow")!=null)
 								inParams[i] = getRowItemFromRow((MagicRegionRow)params.get("defaultRow"), assembler.getDisplayName());
-							} else 
+							else if(params.get("defaultRowItem")!=null)
+								inParams[i] = params.get("defaultRowItem");
+							else 
 								inParams[i] = getRowItemFromRow(row, assembler.getDisplayName());
 						} else if("defaultRow".equals(names[i])) {
 							if(params.get("defaultRow")!=null)
@@ -519,12 +520,11 @@ public class MagicSpaceHandler {
 							inParams[i] = params.get(names[i]);
 					}
 				}
-				codeName = assembler.getCodeName();
 				MagicLoaderUtils.invokeRegionCode(row.getSpaceName(), row.getRegionName(),assembler.getCodeName() , inParams);
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
-			throw new RuntimeException("invoke "+row.getSpaceName()+"-"+row.getRegionName()+"-"+codeName+" on "+displayName+" failed");
+			throw new RuntimeException("invoke Space:"+row.getSpaceName()+";Region:"+row.getRegionName()+";code:"+codeName+" on dimension:"+displayName+" failed");
 		}
 		return true;
 	}

@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.magic7.core.dao.Magic7IdGenerator;
@@ -21,7 +23,8 @@ import org.magic7.core.service.ServiceStaticInfo;
 
 @Entity
 @Table(name = "DEFAULT_ROW_ITEM")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)  
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) 
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MagicSuperRowItem {
 private static final String SEQ = ServiceStaticInfo.TABLE_PREFIX+"RowItem";
 	

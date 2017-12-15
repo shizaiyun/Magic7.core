@@ -91,4 +91,8 @@ public interface MagicService {
 	public Boolean saveTriggerAssembler(MagicTriggerAssembler assembler);
 	public MagicTriggerAssembler getAssemblerById(String id);
 	public Boolean deleteAssembler(MagicTriggerAssembler assembler);
+	public List<String> listRowIds(String partition,String spaceName,String regionName,String displayName,String objectId,
+			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count) ;
+	public List<String>  listRowItemIds(String partition, String rowId,String viewName, String orderBy);
+	public MagicSuperRowItem getRowItemById(String rowId) ;
 }

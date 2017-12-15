@@ -42,7 +42,7 @@ public class MagicRegionShell {
 		return service.saveRowItem(rowItem);
 	}
 	public MagicRegionRow getRowById(String rowId) {
-		return MagicSpaceHandler.getRowById(rowId);
+		return MagicSpaceHandler.getRowById(rowId, null);
 	}
 	public MagicSuperRowItem getRowItemFromRow(MagicRegionRow row,String displayName) {
 		return MagicSpaceHandler.getRowItemFromRow(row, displayName);

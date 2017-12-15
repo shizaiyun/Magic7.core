@@ -70,6 +70,8 @@ public class DaoAssistant {
 	private static final ThreadLocal<Object> session = new ThreadLocal<Object>();
 	private static final ThreadLocal<Boolean> isAuto = new ThreadLocal<Boolean>();
 	private static final ThreadLocal<Transaction> tx = new ThreadLocal<Transaction>();
+	private static final ThreadLocal<Integer> openCount = new ThreadLocal<>();
+	private static final ThreadLocal<Integer> tranCount = new ThreadLocal<>();
 	
 	public static Session currentSession(Boolean auto) {
 		return  currentSession(null,auto);
@@ -91,6 +93,14 @@ public class DaoAssistant {
 			if(auto==null)
 				auto = true;
 			isAuto.set(auto);
+		}
+		if(auto==false) {
+			Integer count = openCount.get();
+			if(count==null) 
+				count = 1;
+			else
+				count++;
+			openCount.set(count);
 		}
 
 		if (s == null) {
@@ -121,14 +131,35 @@ public class DaoAssistant {
 				s.close();
 			session.set(null);
 			isAuto.set(null);
+			openCount.set(null);
+			tranCount.set(null);
 		}
 	}
 	public static void closeSessionByService() {
-		Session s = (Session) session.get();
-		if (s != null)
-			s.close();
-		session.set(null);
-		isAuto.set(null);
+		Boolean auto = isAuto.get();
+		if(auto!=null&&auto==false) {
+			Integer count = openCount.get();
+			if(count==null||count==1) {
+				Session s = (Session) session.get();
+				if (s != null)
+					s.close();
+				session.set(null);
+				isAuto.set(null);
+				openCount.set(null);
+				tranCount.set(null);
+			} else {
+				count--;
+				openCount.set(count);
+			}
+		} else {
+			Session s = (Session) session.get();
+			if (s != null)
+				s.close();
+			session.set(null);
+			isAuto.set(null);
+			openCount.set(null);
+			tranCount.set(null);
+		}
 	}
 
 	/**
@@ -142,13 +173,32 @@ public class DaoAssistant {
 	public static SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
+	public static Boolean flush() {
+		currentSession().flush();
+		return true;
+	}
 	public static Boolean beginTransaction() {
+		Integer count = tranCount.get();
+		if(count==null||count==0)
+			count=1;
+		else
+			count++;
+		tranCount.set(count);
 		Transaction transaction = tx.get();
 		if(transaction==null||!transaction.isActive()) 
 			tx.set(currentSession().beginTransaction());
 		return true;
 	}
 	public static Boolean commitTransaction() {
+		Boolean auto = isAuto.get();
+		if(auto==false) {
+			Integer count = tranCount.get();
+			if(count!=1) {
+				count--;
+				tranCount.set(count);
+				return true;
+			}			
+		}
 		Transaction transaction = tx.get();
 		if(transaction==null)
 			throw new RuntimeException("transaction is null");

@@ -96,10 +96,15 @@ public class MagicSpaceHandler {
 		ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
 		String partition = getPartition(spaceName, regionName);
-		List<String> rowIds = service.listRowIds(partition, spaceName,regionName, dimensionName, objectId, valid, searchCriterias, orderBy, start, count);
-		List<MagicRegionRow> rows = new ArrayList<>();
-		for(String id:rowIds) {
-			rows.add(getRowById(id));
+		List<MagicRegionRow> rows = service.listRow(partition, spaceName,regionName, dimensionName, objectId, valid, searchCriterias, orderBy, start, count);
+		for(MagicRegionRow row:rows) {
+			List<String> itemIds = service.listRowItemIds(getPartition(row.getSpaceName(),  row.getRegionName()), row.getId(), viewName, null);
+			List<MagicSuperRowItem> items = new ArrayList<>();
+			for(String itemId:itemIds) {
+				items.add(service.getRowItemById(itemId));
+			}
+			populateRowItemList(items,null);
+			row.setRowItems(items);
 		}
 		return rows;
 	}
@@ -213,10 +218,11 @@ public class MagicSpaceHandler {
 		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
 		return spaceRegion.getMultiply();
 	}
-	public static MagicRegionRow getRowById(String id) {
+	public static MagicRegionRow getRowById(String id, String viewName) {
 		ServiceUtil.notNull(id, "id is null");
 		MagicRegionRow row = service.getRowById(id);
-		List<String> itemIds = service.listRowItemIds(getPartition(row.getSpaceName(),  row.getRegionName()), id, null, null);
+		ServiceUtil.notNull(row, "row:"+id+" is not in database");
+		List<String> itemIds = service.listRowItemIds(getPartition(row.getSpaceName(),  row.getRegionName()), id, viewName, null);
 		List<MagicSuperRowItem> items = new ArrayList<>();
 		for(String itemId:itemIds) {
 			items.add(service.getRowItemById(itemId));
@@ -667,11 +673,11 @@ public class MagicSpaceHandler {
 		object.setSpaceId(space.getId());
 		object.setSpaceName(space.getName());
 		
-		DaoAssistant.closeSessionByService();
 		DaoAssistant.currentSession(false);
 		try {
 			DaoAssistant.beginTransaction();
 			service.saveMagicObject(object);
+			DaoAssistant.flush();
 			DaoAssistant.commitTransaction();
 		} catch (Exception e) {
 			DaoAssistant.rollBackTransaction();
@@ -690,7 +696,6 @@ public class MagicSpaceHandler {
 		MagicObjectRegion objectRegion = service.getObjectRegion(objectId, regionName);
 		MagicSpaceRegion spaceRegion = service.getSpaceRegion(spaceName, regionName);
 		MagicRegionRow row = new MagicRegionRow();
-		DaoAssistant.closeSessionByService();
 		DaoAssistant.currentSession(false);
 		try {
 			DaoAssistant.beginTransaction();
@@ -710,6 +715,7 @@ public class MagicSpaceHandler {
 			}
 			row = createRow(object.getSpaceName(),spaceRegion.getName(),object.getId(),valid);
 			saveRow(row);
+			DaoAssistant.flush();
 			DaoAssistant.commitTransaction();
 		} catch (Exception e) {
 			DaoAssistant.rollBackTransaction();

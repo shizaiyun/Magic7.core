@@ -82,7 +82,7 @@ public class MagicSpaceHandler {
 	}
 	public static List<MagicRegionRow> listRow(String spaceName,String regionName,String viewName,String dimensionName,String objectId,
 			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count) {
-		ServiceUtil.notNull(spaceName, "spaceName is null");
+		/*ServiceUtil.notNull(spaceName, "spaceName is null");
 		ServiceUtil.notNull(regionName, "regionName is null");
 		String partition = getPartition(spaceName, regionName);
 		List<MagicRegionRow> rows = service.listRow(partition, spaceName,regionName, dimensionName, objectId, valid, searchCriterias, orderBy, start, count);
@@ -91,6 +91,15 @@ public class MagicSpaceHandler {
 			items = service.listRowItem(partition, row.getId(), viewName, " seq ");
 			populateRowItemList(items,viewName);
 			row.setRowItems(items);
+		}
+		return rows;*/
+		ServiceUtil.notNull(spaceName, "spaceName is null");
+		ServiceUtil.notNull(regionName, "regionName is null");
+		String partition = getPartition(spaceName, regionName);
+		List<String> rowIds = service.listRowIds(partition, spaceName,regionName, dimensionName, objectId, valid, searchCriterias, orderBy, start, count);
+		List<MagicRegionRow> rows = new ArrayList<>();
+		for(String id:rowIds) {
+			rows.add(getRowById(id));
 		}
 		return rows;
 	}
@@ -207,7 +216,11 @@ public class MagicSpaceHandler {
 	public static MagicRegionRow getRowById(String id) {
 		ServiceUtil.notNull(id, "id is null");
 		MagicRegionRow row = service.getRowById(id);
-		List<MagicSuperRowItem> items = service.listRowItem(getPartition(row.getSpaceName(),  row.getRegionName()), id, null, null);
+		List<String> itemIds = service.listRowItemIds(getPartition(row.getSpaceName(),  row.getRegionName()), id, null, null);
+		List<MagicSuperRowItem> items = new ArrayList<>();
+		for(String itemId:itemIds) {
+			items.add(service.getRowItemById(itemId));
+		}
 		populateRowItemList(items,null);
 		row.setRowItems(items);
 		return row;
@@ -561,6 +574,8 @@ public class MagicSpaceHandler {
 		String partition = spaceRegion.getPartition();
 		if(StringUtils.isEmpty(partition))
 			partition = space.getPartition();
+		if(StringUtils.isEmpty(partition)) 
+			partition = ServiceStaticInfo.TABLE_PREFIX;
 		return partition;
 	}
 	public static List<MagicDimension> getQueryDimension(String spaceName,String regionName,Map<String,String> conditionPairs) {

@@ -11,6 +11,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StringType;
 
 public class BaseDao {
 	private static final BaseDao instance = new BaseDao();
@@ -162,7 +163,13 @@ public class BaseDao {
 					query.setParameter(key, value);
 				}
 			}
-			return query.addEntity(collectionName,className).setFirstResult(start).setMaxResults(count).setCacheable(true).list();
+			if(className!=null) {
+				if(className.toString().equals(StringType.class.toString()))
+					query.addScalar("id",StringType.INSTANCE);
+				else
+					query = query.addEntity(collectionName,className);
+			}
+			return query.setCacheable(true).setFirstResult(start).setMaxResults(count).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			//HibernateUtil.closeSession();

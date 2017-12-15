@@ -10,6 +10,7 @@ import org.magic7.core.dao.MagicDao;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
+import org.magic7.core.domain.MagicRowItem;
 import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
@@ -420,5 +421,15 @@ public class MagicServiceImpl implements MagicService {
 	public Boolean deleteAssembler(MagicTriggerAssembler assembler) {
 		ServiceUtil.notNull(assembler, "assembler is null");
 		return magicDao.delete(assembler);
+	}
+	public List<String> listRowIds(String partition,String spaceName,String regionName,String displayName,String objectId,
+			Boolean valid,List<MagicDimension> searchCriterias,String orderBy, Integer start, Integer count) {
+		return magicDao.listRowIds(partition, spaceName, regionName, displayName, objectId, valid, searchCriterias, orderBy, start, count);
+	}
+	public List<String>  listRowItemIds(String partition, String rowId,String viewName, String orderBy) {
+		return magicDao.listRowItemIds(partition, rowId, viewName, orderBy);
+	}
+	public MagicSuperRowItem getRowItemById(String rowId) {
+		return (MagicSuperRowItem) magicDao.getObject(MagicRowItem.class, rowId);
 	}
 }

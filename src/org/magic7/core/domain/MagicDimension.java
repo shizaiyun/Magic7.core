@@ -90,7 +90,8 @@ public class MagicDimension {
 	public enum Destination {
 		FOR_DATA("FOR_DATA",0),
 		FOR_QUERY("FOR_QUERY",1),
-		FOR_BUTTON("FOR_BUTTON",2);
+		FOR_BUTTON("FOR_BUTTON",2),
+		FOR_LOGIC("FOR_LOGIC",3);
 		private String name;
 		private Integer code;
 		private Destination(String name,Integer code) {
@@ -162,7 +163,6 @@ public class MagicDimension {
 			this.code = code;
 		}
 	}
- 
 	public enum QueryType {
 		PRECISE("Precise",0),
 		VAGUE("Vague",1),
@@ -204,7 +204,6 @@ public class MagicDimension {
 			this.code = code;
 		}
 	}
-	
 	public enum ValueType {
 		STR_VALUE("STR_VALUE",0),
 		NUM_VALUE("NUM_VALUE",1),

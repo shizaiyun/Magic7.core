@@ -94,7 +94,7 @@ public class MagicDao extends BaseDao {
 			hql.append(" order by "+orderBy);
 		return super.listWithSql(hql.toString(), params,"",MagicDimension.class.getCanonicalName(), 0, 1000);
 	}
-	private void querySingleRegion(StringBuilder hql,String partition,String objectId,
+	private Integer querySingleRegion(StringBuilder hql,String partition,String objectId,
 			String displayName,MagicDimension dimension, List<MagicDimension> searchCriterias,Integer index, Map<String,Object> params) {
 		String condition = null;
 		if(searchCriterias!=null) {
@@ -196,6 +196,7 @@ public class MagicDao extends BaseDao {
 				if(index>0)
 					hql.append(" union ");
 				index++;
+				System.out.println("22222222222222222222222222222222222 index:"+index);
 				hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM item where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
 				if(StringUtils.isNotEmpty(objectId)) {
 					hql.append(objectQueryWithRowItem);
@@ -207,8 +208,9 @@ public class MagicDao extends BaseDao {
 				}
 			}
 		}
+		return index;
 	}
-	private void querySingleRegionAndClass(StringBuilder hql,String partition,String objectId,
+	private Integer querySingleRegionAndClass(StringBuilder hql,String partition,String objectId,
 			String displayName,MagicDimension dimension, List<MagicDimension> searchCriterias,Integer index, Map<String,Object> params) {
 		String tableName = null;
 		String lnkDimension = null;
@@ -268,8 +270,9 @@ public class MagicDao extends BaseDao {
 				}
 			}
 		}
+		return index;
 	}
-	private void queryDoubleRegions(StringBuilder hql,String partition,String objectId,//两张动态表关联
+	private Integer queryDoubleRegions(StringBuilder hql,String partition,String objectId,//两张动态表关联
 			String displayName,MagicDimension dimension, List<MagicDimension> searchCriterias,Integer index, Map<String,Object> params) {
 		String condition = null;
 		if(searchCriterias!=null) {
@@ -384,18 +387,19 @@ public class MagicDao extends BaseDao {
 				}
 			}
 		}
+		return index;
 	}
 	private void bulidQueryConditionsSQL(StringBuilder hql,String partition,String objectId,
 			String displayName,List<MagicDimension> dimensions, List<MagicDimension> searchCriterias, Map<String,Object> params) {
 		Integer index = 0;
 		for(MagicDimension dimension:dimensions) {
 			if(!dimension.getLnk()) {
-				querySingleRegion(hql,partition,objectId,displayName,dimension,searchCriterias,index,params);
+				index = querySingleRegion(hql,partition,objectId,displayName,dimension,searchCriterias,index,params);
 			} else {
 				if(!dimension.getVirtual())
-					querySingleRegionAndClass(hql, partition, objectId, displayName, dimension, searchCriterias, index, params);
+					index = querySingleRegionAndClass(hql, partition, objectId, displayName, dimension, searchCriterias, index, params);
 				else
-					queryDoubleRegions(hql, partition, objectId, displayName, dimension, searchCriterias, index, params);
+					index = queryDoubleRegions(hql, partition, objectId, displayName, dimension, searchCriterias, index, params);
 			}
 		}
 	}
@@ -646,6 +650,7 @@ public class MagicDao extends BaseDao {
 			hql.append(" order by row."+orderBy);
 		params.put("spaceName", spaceName);
 		params.put("spaceRegionName", regionName);
+		System.out.println("1111111111111111111111111111111:"+hql);
 		return super.listWithSql(hql.toString(), params, "", MagicRegionRow.class.getCanonicalName(), start, count);
 	}
 	@SuppressWarnings("unchecked")

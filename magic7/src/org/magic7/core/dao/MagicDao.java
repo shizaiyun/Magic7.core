@@ -196,7 +196,6 @@ public class MagicDao extends BaseDao {
 				if(index>0)
 					hql.append(" union ");
 				index++;
-				System.out.println("22222222222222222222222222222222222 index:"+index);
 				hql.append(" select '"+criteria.getDisplayName()+"' as display_name,row_id from "+partition+"_ROW_ITEM item where SPACE_NAME=:spaceName and SPACE_REGION_NAME=:spaceRegionName "+condition);
 				if(StringUtils.isNotEmpty(objectId)) {
 					hql.append(objectQueryWithRowItem);
@@ -650,7 +649,6 @@ public class MagicDao extends BaseDao {
 			hql.append(" order by row."+orderBy);
 		params.put("spaceName", spaceName);
 		params.put("spaceRegionName", regionName);
-		System.out.println("1111111111111111111111111111111:"+hql);
 		return super.listWithSql(hql.toString(), params, "", MagicRegionRow.class.getCanonicalName(), start, count);
 	}
 	@SuppressWarnings("unchecked")

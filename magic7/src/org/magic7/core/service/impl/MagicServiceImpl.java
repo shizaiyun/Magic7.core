@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.magic7.core.dao.MagicDao;
+import org.magic7.core.dao.SupervisionDao;
 import org.magic7.core.domain.MagicCodeLib;
 import org.magic7.core.domain.MagicDimension;
 import org.magic7.core.domain.MagicRegionRow;
@@ -15,6 +16,12 @@ import org.magic7.core.domain.MagicChoice;
 import org.magic7.core.domain.MagicChoiceItem;
 import org.magic7.core.domain.MagicSuperRowItem;
 import org.magic7.core.domain.MagicTriggerAssembler;
+import org.magic7.core.domain.supervision.MagicMenu;
+import org.magic7.core.domain.supervision.MagicMenuConnector;
+import org.magic7.core.domain.supervision.MagicPage;
+import org.magic7.core.domain.supervision.MagicPageAssembler;
+import org.magic7.core.domain.supervision.MagicParticipant;
+import org.magic7.core.domain.supervision.MagicPaticipantGroup;
 import org.magic7.core.domain.MagicObject;
 import org.magic7.core.domain.MagicObjectRegion;
 import org.magic7.core.domain.MagicSpace;
@@ -29,7 +36,8 @@ import org.magic7.utils.ServiceUtil;
 public class MagicServiceImpl implements MagicService {
 	private static MagicServiceImpl instance = new MagicServiceImpl();
 	private MagicServiceImpl() {}
-	private static MagicDao magicDao = MagicDao.getInstance();
+	private static final MagicDao magicDao = MagicDao.getInstance();
+	private static final SupervisionDao supervisionDao = SupervisionDao.getInstance();
 	public static MagicServiceImpl getInstance() {
 		return instance;
 	}
@@ -431,5 +439,49 @@ public class MagicServiceImpl implements MagicService {
 	}
 	public MagicSuperRowItem getRowItemById(String rowId) {
 		return (MagicSuperRowItem) magicDao.getObject(MagicRowItem.class, rowId);
+	}
+	public Boolean savePage(MagicPage magicPage) {
+		ServiceUtil.notNull(magicPage, "magicPage is null");
+		ServiceUtil.notNull(magicPage.getName(), "magicPage.name is null");
+		ServiceUtil.notNull(magicPage.getDataViewId(), "magicPage.dataViewId is null");
+		ServiceUtil.notNull(magicPage.getSpaceId(), "magicPage.spaceId is null");
+		ServiceUtil.notNull(magicPage.getSpaceName(), "magicPage.spaceName is null");
+		ServiceUtil.notNull(magicPage.getRegionId(), "magicPage.regionId is null");
+		ServiceUtil.notNull(magicPage.getRegionName(), "magicPage.regionName is null");
+		return supervisionDao.savePage(magicPage);
+	}
+	public Boolean savePageAssembler(MagicPageAssembler pageAssembler) {
+		ServiceUtil.notNull(pageAssembler, "pageAssembler is null");
+		ServiceUtil.notNull(pageAssembler.getName(), "pageAssembler.name is null");
+		ServiceUtil.notNull(pageAssembler.getMenuId(), "pageAssembler.menuId is null");
+		ServiceUtil.notNull(pageAssembler.getPageId(), "pageAssembler.pageId is null");
+		ServiceUtil.notNull(pageAssembler.getRegionType(), "pageAssembler.regionType is null");
+		ServiceUtil.notNull(pageAssembler.getSeq(), "pageAssembler.seq is null");
+		return supervisionDao.savePageAssembler(pageAssembler);
+	}
+	public Boolean saveParticipant(MagicParticipant participant) {
+		ServiceUtil.notNull(participant, "participant is null");
+		ServiceUtil.notNull(participant.getName(), "participant.name is null");
+		ServiceUtil.notNull(participant.getParticipantType(), "participant.participantType is null");
+		ServiceUtil.notNull(participant.getSeq(), "participant.seq is null");
+		ServiceUtil.notNull(participant.getToken(), "participant.token is null");
+		return supervisionDao.saveParticipant(participant);
+	}
+	public Boolean saveMenuConnector(MagicMenuConnector menuConnector) {
+		ServiceUtil.notNull(menuConnector, "menuConnector is null");
+		ServiceUtil.notNull(menuConnector.getAccessorId(), "menuConnector.accessorId is null");
+		ServiceUtil.notNull(menuConnector.getProviderId(), "menuConnector.providerId is null");
+		return supervisionDao.saveMenuConnector(menuConnector);
+	}
+	public Boolean saveMenu(MagicMenu magicMenu) {
+		ServiceUtil.notNull(magicMenu, "magicMenu is null");
+		ServiceUtil.notNull(magicMenu.getMenuConnectorId(), "magicMenu.connectorId is null");
+		ServiceUtil.notNull(magicMenu.getName(), "magicMenu.name is null");
+		return supervisionDao.saveMenu(magicMenu);
+	}
+	public Boolean savePaticipantGroup(MagicPaticipantGroup participantGroup) {
+		ServiceUtil.notNull(participantGroup, "participantGroup is null");
+		ServiceUtil.notNull(participantGroup.getName(), "participantGroup.name is null");
+		return supervisionDao.savePaticipantGroup(participantGroup);
 	}
 }

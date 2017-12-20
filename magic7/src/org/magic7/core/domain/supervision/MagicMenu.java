@@ -26,11 +26,11 @@ public class MagicMenu {
 	@Column(name="ID",length=64)
 	private String id;
 	
-	@Column(name = "MENU_MANAGER_ID", length = 64)
-	private String menuManagerId;
+	@Column(name = "MENU_CONNECTOR_ID", length = 64)
+	private String menuConnectorId;
 	
-	@Column(name = "PARENT_MENU_ID", length = 64)
-	private String parentMenuId;
+	@Column(name = "PARENT_ID", length = 64)
+	private String parentId;
 	
 	@Column(name = "NAME", length = 300)
 	private String name;
@@ -44,18 +44,6 @@ public class MagicMenu {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getMenuManagerId() {
-		return menuManagerId;
-	}
-	public void setMenuManagerId(String menuManagerId) {
-		this.menuManagerId = menuManagerId;
-	}
-	public String getParentMenuId() {
-		return parentMenuId;
-	}
-	public void setParentMenuId(String parentMenuId) {
-		this.parentMenuId = parentMenuId;
-	}
 	public String getName() {
 		return name;
 	}
@@ -67,5 +55,17 @@ public class MagicMenu {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getMenuConnectorId() {
+		return menuConnectorId;
+	}
+	public void setMenuConnectorId(String menuConnectorId) {
+		this.menuConnectorId = menuConnectorId;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 }
